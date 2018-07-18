@@ -93,6 +93,7 @@ FileCreateDir,%A_Desktop%\%TenFolder%\%barcode%
 return
 
 Quit:
+Gui 2:Destroy
 baocao.Workbooks.Close()
 ExitApp
 
@@ -116,7 +117,7 @@ F1::
 ;sleep,50
 ;send, ^a
 ;sleep,50
-SendRaw, %Barcode%
+SendRaw, %Barcode%`n
 return
 
 F2::
@@ -185,4 +186,12 @@ return
 
 f6::
 SendRaw, %linh1%
+return
+
+f3::
+Save:
+MouseGetPos, X, Y
+Click, 1889, 614 left, 1
+sleep, 100
+MouseMove, %X%, %Y%
 return

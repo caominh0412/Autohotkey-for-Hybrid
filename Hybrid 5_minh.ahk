@@ -83,7 +83,7 @@ Gui 1: Add, Text, x17 y695 w160 h20 vAppStatus, Label: %A_ThisLabel%
 Gui 1: Add, Text, x17 y715 w160 h20 vEstimated, Còn lại: 
 Gui 1: Add, Button, x97 y755 w80 h30 gReset, Reset
 Gui 1: Add, Button, x7 y755 w80 h30 gManualSetting, Manual Setting
-Gui 1: Add, Button, x2 y69 w90 h30 gBienthe, Bienthe
+Gui 1: Add, Button, x2 y69 w90 h30 gBienthe vBienthe, Bienthe
 Gui 1: Add, Button, x92 y129 w100 h30 gResetCount, ResetCount
 ; Generated using SmartGUI Creator for SciTE
 Gui 1: +AlwaysOnTop
@@ -116,6 +116,7 @@ Gui 5: Add, Button, x210 y10 w100 h30  gThayten, Thay tên
 Gui 5: Add, Button, x310 y10 w100 h30  gCheckthuoctinh, Check thuộc tính
 Gui 5: Add, Button, x410 y10 w100 h30  gNewUp, Up ảnh mới
 Gui 5: Add, Button, x510 y10 w100 h30  gDoibrand, Doi Brand 
+Gui 5: Add, Button, x610 y10 w100 h30  gSaithuoctinh, Sai thuoc tinh 
 
 Gui 7: Add, text, w300 vEstimated2, Còn lại: 
 ;Gui 7: Add, Button, w70 h30 ys gGui7Close, Close
@@ -1450,7 +1451,7 @@ Loop
 		gosub, CheckDone
 		sleep,300
 		gosub, checkDatimthay 
-		ImageSearch,,yPFound, 1869, 412,1923, 449, 0items.png
+		ImageSearch,,yPFound, 1869, 412,1923, 449, PNG\0items.png
 		If (yPFound = "")
 		{
 		sleep,300
@@ -1468,6 +1469,7 @@ Loop
 		until pxcheck = 0xFFFFFF ;check đã click sp
 		sleep,400
 		qcstate := CheckQC()
+		/*
 		If (qcstate = "submit")
 		{
 		click, 356, 661 left, 1 ; click submit to  qc
@@ -1485,6 +1487,13 @@ Loop
 			qcstage := CheckQC()
 		}
 		until (qcstage = "qcdone")
+		*/
+		if (qcstate <> "qcdone")
+		{
+			click, 356, 661 left, 1 ; click submit to  qc
+			sleep,300
+			click, 436, 663 left, 1
+		}
 		;gosub, checkSaveDone
 		;gosub, CheckDone
 	}
@@ -1754,7 +1763,7 @@ Loop
 		until pxcheck = 0x797876
 		sleep, 300
 		click, 1116, 299 left, 1
-		sleep, 1400
+		sleep, 1800
 		; Switch to hybris
 		send, ^1	
 		find(824023)    ; Find biến thể 824023 
@@ -1952,6 +1961,164 @@ Loop
 until (varID = "")
 return
 
+Saithuoctinh:
+Gui 5:submit
+Gui 5: Submit
+GuiControl,1:,AppStatus, Label %A_ThisLabel%
+WinMove, Hybrid 3.0,, -60
+Winset, Trans, 199, Hybrid 3.0
+Loop
+{
+	gosub, starttime
+	gosub, excel
+	If (varID = "")
+	{
+		MsgBox, Không còn gì để tạo đâu
+		return
+	}
+		varCurrent = %varID%
+		GuiControl, 1:, Current, %varCurrent%
+		gosub, Progress1
+		WinActivate, ahk_exe chrome.exe
+		sleep, 200
+		gosub,CheckDone
+		gosub, FindID
+		sleep,100
+		gosub, Checkloading
+		sleep,100
+		gosub, CheckDone
+		sleep,200
+		gosub, checkDatimthay
+		sleep, 300
+		ImageSearch,,yPFound, 1869, 412,1923, 449, PNG\0items.png
+		If (yPFound <> ""){
+			baocao.range("E" . Row ).value := "SP bi loi"
+		}
+
+		else
+		{
+			click, 564, 502 left, 1 ;click picture
+
+			sleep, 400
+			Loop
+			{
+				PixelGetColor, pxcheck, 1900, 883
+				timeout++
+				If (timeout = 200)
+				{
+					return
+				}
+			}
+			until pxcheck = 0xFFFFFF ;check đã click sp
+			sleep, 500
+			;-----------------------------bat dau tu cho nay
+			click, 588, 713 left, 1
+			sleep, 300
+			Loop
+			{
+				PixelGetColor, pxcheck,1879, 922
+			}
+			until pxcheck = 0xFFFFFF
+			Size := getsize() ;Check size dang co
+			Sizeexcel := baocao.range("D" . Row ).value
+			;Neu size  = cot F -> next
+			If (Size.size = Sizeexcel)
+			{
+				Row++
+				gosub,endtime
+				Continue
+			}
+			;Neu size <> cot F -> xoa size
+			If (Size.size <> Sizeexcel)
+			{
+				;click xoa
+				If (Size.size <> "Loi")
+				{
+					vitri := Size.vitri +5	
+					click, 1015, %vitri% left, 1
+					sleep, 400
+					MouseMove, 0,0
+					sleep, 200
+					ImageSearch, bachamX, bachamY, 227, 793, 1028, 960, PNG\bacham.png				
+					If ErrorLevel
+					{
+						MsgBox, Loi - Tu lam
+						Continue
+					}
+					click, %bachamX%, %bachamY% left, 1
+					sleep, 400
+					Loop
+					{
+						PixelGetColor, pxcheck, 1614, 424
+						GuiControl, 1:, GuiPxcheck,  %pxcheck%		
+					}
+					until pxcheck = 0xFFFFFF ;check da hien bảng chọn ?
+					sleep, 400
+					click,  651, 335 left, 1
+					sleep, 300
+					If (Sizeexcel = "S")
+					{
+						send, VVC9882`n
+					}
+					If (Sizeexcel = "XS")
+					{
+						send, VVC9891`n
+					}
+					If (Sizeexcel = "M")
+					{
+						send, VVC9880`n
+					}
+					If (Sizeexcel = "L")
+					{
+						send, VVC9887`n
+					}
+					If (Sizeexcel = "XL")
+					{
+						send, VVC9890`n
+					}
+					If (Sizeexcel = "XXL")
+					{
+						send, VVC9957`n
+					}			
+					sleep, 700,
+					Loop
+					{
+						PixelGetColor, pxcheck, 1607, 490
+						GuiControl, 1:, GuiPxcheck,  %pxcheck%		
+					}
+					until pxcheck = 0xFFFFFF
+					sleep, 700
+					click, 585, 519 left, 1
+					sleep, 500
+					click, 1603, 862 left, 1		
+				}
+				else
+				{
+					baocao.range("E" . Row ).value := "Loi"
+					Row++
+					gosub,endtime
+					Continue
+				}
+				sleep, 400
+				gosub, checkDone
+				sleep, 200
+				gosub, CheckSave
+				sleep, 300
+				click, 1882, 658 left, 1 ; click save
+			}
+			;Find size moi
+
+			;Ket thuc
+			gosub, checkSaveDone
+			gosub, CheckDone
+			gosub,endtime
+			gosub,endtime
+		}
+	Row++
+}
+until (varID = "")
+return
+
 ;------------------------------------------------------------------------------------------------------Funtion-----------------------------------------------------------------------
 
 AutoMapMediaContainerSP()
@@ -2083,9 +2250,9 @@ endtime:
 
 CheckQC()
 {
-		ImageSearch,,ysubmit,276, 645,490, 688 , submittoQC.png
-		ImageSearch,,yapprove,276, 645,490, 688 , Approve.png
-		ImageSearch,,yqcdone,276, 645,490, 688 , qcdone.png
+		ImageSearch,,ysubmit,276, 645,490, 688 , PNG\submittoQC.png
+		ImageSearch,,yapprove,276, 645,490, 688 , PNG\Approve.png
+		ImageSearch,,yqcdone,276, 645,490, 688 , PNG\qcdone.png
 		if (ysubmit <> ""){
 			return "submit"
 		}
@@ -2102,4 +2269,43 @@ find(var)
 click, 637, 228 left,3
 sleep, 200
 SendRaw, %var%`n
+}
+
+getsize()
+{
+	ImageSearch, Sx, Sy, 227, 793, 1028, 960, PNG\S.png
+	ImageSearch, XSx, XSy, 227, 793, 1028, 960, PNG\XS.png
+	ImageSearch, Mx, My, 227, 793, 1028, 960, PNG\M.png
+	ImageSearch, Lx, Ly, 227, 793, 1028, 960, PNG\L.png
+	ImageSearch, XLx, XLy, 227, 793, 1028, 960, PNG\XL.png
+	ImageSearch, XXLx, XXLy, 227, 793, 1028, 960, PNG\XXL.png
+	If (Sx <> "")
+	{
+		Giatri := {size: "S", Vitri: Sy}
+	}
+	If (XSx <> "")
+	{
+		Giatri := {size: "XS", Vitri: XSy}
+	}
+	If (Mx <> "")
+	{
+		Giatri := {size: "M", Vitri: My}
+	}
+	If (Lx <> "")
+	{
+		Giatri := {size: "L", Vitri: Ly}
+	}
+	If (XLx <> "")
+	{
+		Giatri := {size: "XL", Vitri: XLy}
+	}
+	If (XXLx <> "")
+	{
+		Giatri := {size: "XXL", Vitri: XXLy}
+	}
+	If (Sx = "" AND XSX = "" AND Mx = "" AND Lx = "" AND XLx = "" AND XXLx = "")
+	{
+		Giatri := {size: "Loi", Vitri: "Loi"}
+	}
+	return Giatri
 }

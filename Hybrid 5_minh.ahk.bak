@@ -1450,7 +1450,7 @@ Loop
 		gosub, CheckDone
 		sleep,300
 		gosub, checkDatimthay 
-		ImageSearch,,yPFound, 1869, 412,1923, 449, 0items.png
+		ImageSearch,,yPFound, 1869, 412,1923, 449, PNG\0items.png
 		If (yPFound = "")
 		{
 		sleep,300
@@ -1468,6 +1468,7 @@ Loop
 		until pxcheck = 0xFFFFFF ;check đã click sp
 		sleep,400
 		qcstate := CheckQC()
+		/*
 		If (qcstate = "submit")
 		{
 		click, 356, 661 left, 1 ; click submit to  qc
@@ -1485,6 +1486,13 @@ Loop
 			qcstage := CheckQC()
 		}
 		until (qcstage = "qcdone")
+		*/
+		if (qcstate <> "qcdone")
+		{
+			click, 356, 661 left, 1 ; click submit to  qc
+		sleep,300
+		click, 436, 663 left, 1
+		}
 		;gosub, checkSaveDone
 		;gosub, CheckDone
 	}
@@ -2083,9 +2091,9 @@ endtime:
 
 CheckQC()
 {
-		ImageSearch,,ysubmit,276, 645,490, 688 , submittoQC.png
-		ImageSearch,,yapprove,276, 645,490, 688 , Approve.png
-		ImageSearch,,yqcdone,276, 645,490, 688 , qcdone.png
+		ImageSearch,,ysubmit,276, 645,490, 688 , PNG\submittoQC.png
+		ImageSearch,,yapprove,276, 645,490, 688 , PNG\Approve.png
+		ImageSearch,,yqcdone,276, 645,490, 688 , PNG\qcdone.png
 		if (ysubmit <> ""){
 			return "submit"
 		}
