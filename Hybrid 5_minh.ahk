@@ -52,48 +52,42 @@ Process,close, GoTiengViet.exe
 #Persistent
 ;SetTimer, AppStatus, 100
 
-Gui 1: Add, Button, x92 y9 w100 h30 gID vID, %varID%
-Gui 1: Add, Button, x92 y39 w50 h30 gID1 vID1,_1
-Gui 1: Add, Button, x142 y39 w50 h30  gID2 vID2, _2
-Gui 1: Add, Button, x92 y69 w50 h30 gID3 vID3, _3
-Gui 1: Add, Button, x142 y69 w50 h30 gID4 vID4, _4
-Gui 1: Add, Button, x92 y99 w50 h30 gID5 vID5 , _5
-Gui 1: Add, Button, x142 y99 w50 h30 gID6 vID6, _6
-Gui 1: Add, Button, x2 y129 w90 h30 gOtherThings, Các chức năng khác
+Gui 1: Add, Button, x92 y9 w90 h30 gID vID, %varID%
+Gui 1: Add, Button, x2 y99 w90 h30 gOtherThings, Các chức năng khác
 Gui 1: Add, Button, x2 y9 w90 h30 gFolder vFolder, Folder
+Gui 1: Add, Button, x92 y39 w90 h30 gBienthe vBienthe, Bienthe
 Gui 1: Add, Button, x2 y39 w90 h30 vBarcode gBarcode, %Barcode%
-Gui 1: Add, Text, x2 y99 w90 h30 +Center vGSoAnh, Số ảnh: %fdcount%
-Gui 1: Add, GroupBox, x2 y159 w190 h210 , Auto
-Gui 1: Add, Button, x7 y175 w170 h30 gAutoCreateContainer, Create Container 
-Gui 1: Add, Button, x7 y205 w170 h30 gAutoCreatePicture, Create Product Media
-Gui 1: Add, Button, x7 y235 w170 h30 gUp, Up ảnh +map - Product Media
-Gui 1: Add, Button, x7 y265 w170 h30 gMap, Map ảnh - Product Media
-Gui 1: Add, Button, x7 y295 w170 h30 gMapContainSP, Map Container vào Sản phẩm 
-Gui 1: Add, Button, x7 y325 w170 h30 gConvert, Convert - Container
-Gui 1: Add, GroupBox, x3 y365 w190 h90 , Excel
-Gui 1: Add, Button, x7 y385 w80 h30 gBack, Back
-Gui 1: Add, Button, x97 y385 w80 h30 gNext, Next
-Gui 1: Add, Button, x7 y415 w80 h30 gTop, Top
-Gui 1: Add, Button, x97 y415 w80 h30 gSelectRow, Chọn dòng
-Gui 1: Add, GroupBox, x3 y455 w190 h60 , Setting
-Gui 1: Add, Button, x7 y475 w80 h30 gSettingProductMedia, Product Media
-Gui 1: Add, Button, x97 y475 w80 h30 gSettingContainer, Container
-Gui 1: Add, Text, x7 y515 w80 h30 vGuiRow, Dòng số: %Row%
-Gui 1: Add, Text, x87 y515 w100 h30 vCurrent, %varCurrent%
-Gui 1: Add, Progress, x7 y605 w170 h20 vProgressBar, 0
-Gui 1: Add, GroupBox, x3 y565 w190 h190 , Debug
-Gui 1: Add, Text, x17 y585 w70 h30 , pxcheck
-Gui 1: Add, Edit, x87 y585 w90 h15 vGuiPxcheck, %pxcheck%
-Gui 1: Add, Text, x17 y625 w160 h70 vDebugPos, IdenPos: %yIden%`nCatProductmediaPos: %yCatProductMedia%`nFolderPos: %yFolder%`nQualifierPos: %yQualifier%`nCatQualifierPos: %yCatContainer%
-Gui 1: Add, Text, x17 y695 w160 h20 vAppStatus, Label: %A_ThisLabel%
-Gui 1: Add, Text, x17 y715 w160 h20 vEstimated, Còn lại: 
-Gui 1: Add, Button, x97 y755 w80 h30 gReset, Reset
-Gui 1: Add, Button, x7 y755 w80 h30 gManualSetting, Manual Setting
-Gui 1: Add, Button, x2 y69 w90 h30 gBienthe vBienthe, Bienthe
-Gui 1: Add, Button, x92 y129 w100 h30 gResetCount, ResetCount
+Gui 1: Add, Text, x2 y69 w90 h30 +Center vGSoAnh, Số ảnh: %fdcount%
+
+Gui 1: Add, GroupBox, x2 y129 w180 h120 , Auto
+Gui 1: Add, Button, x12 y209 w160 h30 gUp, Up ảnh +map - Product Media
+Gui 1: Add, Button, x12 y149 w160 h30 gNewUp, Up ảnh mới
+Gui 1: Add, Button, x12 y179 w160 h30 gMapContainSP, Map Container vào Sản phẩm 
+
+Gui 1: Add, GroupBox, x2 y279 w180 h90 , Excel
+Gui 1: Add, Button, x12 y299 w80 h30 gBack, Back
+Gui 1: Add, Button, x92 y299 w80 h30 gNext, Next
+Gui 1: Add, Button, x12 y329 w80 h30 gTop, Top
+Gui 1: Add, Button, x92 y329 w80 h30 gSelectRow, Chọn dòng
+
+Gui 1: Add, Text, x12 y439 w80 h20 vGuiRow, Dòng số: %Row%
+Gui 1: Add, Text, x92 y439 w90 h20 vCurrent, %varCurrent%
+Gui 1: Add, Progress, x12 y459 w170 h10 vProgressBar, 0
+
+Gui 1: Add, Text, x12 y469 w170 h20 vEstimated, Còn lại: 
+Gui 1: Add, Text, x12 y489 w170 h20 , Thời gian 1 dòng:
+Gui 1: Add, Button, x12 y549 w80 h30 gReset, Reset
+Gui 1: Add, Button, x12 y519 w80 h30 gDoiten, Đổi tên
+
+Gui 1: Add, Button,x92 y99 w90 h30 gResetCount, ResetCount
+Gui 1: Add, Button, x92 y519 w80 h30 , Open Chrome
+Gui 1: Add, Button, x92 y549 w80 h30 , Quit
+
+Gui 1: Add, Button, x92 y69 w90 h30 , Button
+Gui 1: Add, Text, x12 y579 w170 h30 , Giữ chỗ
 ; Generated using SmartGUI Creator for SciTE
 Gui 1: +AlwaysOnTop
-Gui 1: Show, x0 y79, Hybrid 5.0
+Gui 1: Show, x0 y90, Hybrid 6.0
 
 Gui 2: Add, Text, x12 y10 w100 h30 , IdenPos
 Gui 2: Add, Edit, x122 y10 w100 h30 vyIden, %yIden%
@@ -222,7 +216,7 @@ Gui 7: Destroy
 return
 
 Pause:
-f12::
+;f12::
 Pause
 return
 
@@ -238,7 +232,6 @@ Folder:
 Clipboard := varFolder
 varCurrent := Clipboard
 GuiControl, 1:, Current, %varCurrent%
-GuiControl, 1:, Folder , *%varFolder%
 return
 
 ID:
@@ -300,6 +293,9 @@ return
 ResetCount:
 gosub, count
 return
+
+Doiten:
+Run, Others\doi ten.ahk
 
 Next:
 f1::
@@ -1750,9 +1746,16 @@ Loop
 			sleep, 200
 		}
 		; Up ảnh vào màu đen - đỏ - ID Biến thể 824023 
-		Loop ,%fdcount%
+			Loop ,%fdcount%
 		{
-			click, Px, Py+50 left,1
+			If (A_Index = 1)
+			{
+				click 695, 812 left ,1
+			}
+			else
+			{
+				click 640, 624 left ,1
+			}
 			Loop
 			{
 				WinGetActiveTitle,Titlecheck
@@ -1767,7 +1770,7 @@ Loop
 			send, {"}%varBarcode%_%A_Index%.jpg{"}
 			sleep,100
 			sendraw, `n
-			sleep, 400
+			sleep, 500
 		}
 
 			; Click bookmark cm finish - Click Đồng ý
@@ -2410,3 +2413,6 @@ getsize()
 	}
 	return Giatri
 }
+
+
+
