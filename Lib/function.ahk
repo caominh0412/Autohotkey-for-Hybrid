@@ -16,21 +16,23 @@ Loop,6
 		ContainerCount2++
 	}
 }
-MouseMove, 1609, 862
 return ContainerCount2
+MouseMove, 1609, 862
+
 }
 
 ContainerCount()
+
 {
-Loop, 6
-{
-	ImageSearch,,yContainerCount%A_Index%,1579, 445 ,1633, 470,PNG\%A_Index%items.png
-	If (yContainerCount%A_Index% <> "")
+	Loop, 6
 	{
-		ContainerCount = %A_Index%
+		ImageSearch,,yContainerCount%A_Index%,1579, 445 ,1633, 470,PNG\%A_Index%items.png
+		If (yContainerCount%A_Index% <> "")
+		{
+			ContainerCount = %A_Index%
+		}
 	}
-}
-return ContainerCount
+	return ContainerCount
 }
 
 ;--------------------------------- Dem excel ----------------------
@@ -63,14 +65,13 @@ endtime()
 	return endtime
 }
 
-timecount(starttime,endtime,row,count,lasttime)
+timecount(starttime,endtime,row,count,besttime:=100)
 {
-	lasttime:=estimatedmin
 	lastrowtime:=endtime-starttime
 	if lastrowtime>0
 	{
 		estimatedmin:= lastrowtime*(count-row)/60
-		if (lastrowtime<best1rowtime AND lastrowtime>0)
+		if (lastrowtime<besttime AND lastrowtime>0)
 		{
 			best1rowtime:=lastrowtime
 		}
@@ -142,6 +143,15 @@ find(var)
 	click, 637, 228 left,3
 	sleep, 200
 	SendRaw, %var%`n
+	sleep,300
+	Checkloading()
+	sleep,300
+	CheckDone()
+	sleep,300
+	CheckDaTimthay()
+	click, 564, 502 left, 1 ;click picture
+	sleep, 400
+	;CheckMau(1900,883,0xFFFFFF,200)
 }
 
 
@@ -165,23 +175,17 @@ CheckQC()
 
 ;----------------------------- Count excel ---------------------------
 
-debug:
-starttime:=10
-endtime:=100
-row:=20
-count:=60
-best1rowtime:=15
-lastcount:=19
-thoigian:=timecount(starttime,endtime,row,count,best1rowtime)
-MsgBox, % thoigian.hour ":" thoigian.min ":" thoigian.sec "-" thoigian.lastrowtime "-" thoigian.besttime
-return
-
-;---------------- Check trang
-CheckMau(X,Y,Color)
+;---------------- Check mau` 1500 thu ----------------------------
+CheckMau(X,Y,Color,time:=0)
 {
+	timeout:=0
 	Loop
 	{
-		PixelGetColor, pxcheck, %X%, %Y%				
+		PixelGetColor, pxcheck, %X%, %Y%	
+		if (y > 0 and timeout < time)
+		{
+			timeout++
+		}			
 	}
 	until (pxcheck = Color)  ;check đã tìm thấy
 }
@@ -217,3 +221,83 @@ CheckBangtao()
 	CheckMau(1900,190,maubangtao)
 }
 
+CheckDaTimthay()
+{
+	CheckMau(1874,608,maudatimthay)
+}
+
+CheckDone()
+{
+	CheckMau(1897,189,0xFFFFFF)
+}
+
+CheckSave()
+{
+	CheckMau(1902,658,maunutsave)
+}
+
+Checkloading()
+{
+	Loop
+	{
+		PixelGetColor, pxcheck, 960, 518
+	}
+	until pxcheck <> mauloading
+}
+
+CheckSavedone()
+{
+	CheckMau(1902,658,mausavedone)
+}
+
+checkMap()
+{
+	click, 113, 81 left, 1
+	sleep,100
+	checkMap = %Clipboard%
+	return checkMap
+}
+
+CheckMapanh()
+{
+	ImageSearch,,y,1042, 897,1872, 1031,PNG\chuamapanh.png
+	If (y <>"")
+	{
+		click, 1843, 946 left ,1
+		Loop
+		{
+			PixelGetColor, pxcheck, 1610, 390
+			GuiControl, 1:, GuiPxcheck,  %pxcheck%		
+		}
+		until pxcheck = 0xFFFFFF ;check da hien bảng chọn ?
+		sleep, 300
+		Loop
+		{
+			PixelGetColor, pxcheck, 1610, 390
+		}
+		until pxcheck = 0xFFFFFF
+		sleep, 600
+		;click, 518, 295 left, 1
+		;sleep, 400
+		click, 496, 321 left, 1
+		;sleep, 500
+		click,660, 294 left, 1
+		sleep, 200
+		send, %varID%_%fdcount2%`n
+		sleep, 500
+		checkLoading()
+		Loop
+		{
+			PixelGetColor, pxcheck, 1610, 390
+			GuiControl, 1:, GuiPxcheck,  %pxcheck%		
+		}
+		until pxcheck = 0xFFFFFF
+		sleep, 700
+		click, 585, 519 left, 1
+		sleep, 500
+		click, 1603, 862 left, 1
+		sleep, 300
+		CheckDone()
+		click, 1885, 661 left, 1
+	}
+}

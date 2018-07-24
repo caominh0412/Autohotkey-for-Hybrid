@@ -19,19 +19,25 @@ javascript:var text = document.getElementsByClassName('ye-default-reference-edit
 
 
 FileRead,LastDir,Lastdir.txt
+FileRead,LastExcel,LastExcel.txt
 SetKeyDelay,0
-Gui 6: Add, Edit, w470 h60 vfolderloc, %LastDir%
-Gui 6: Add, Button,ys w100 h30 gDirSubmit, Submit
+Gui, Start:Add, Text, x2 y19 w100 h50 Center, Folder
+Gui, Start:Add, Text, x2 y79 w100 h50 Center, Excel
+Gui, Start:Add, Edit, x112 y9 w350 h50 vfolderloc, %LastDir%
+Gui, Start:Add, Edit, x112 y69 w240 h50 vbaocaoloc, %LastExcel%
+Gui, Start:Add, Button, x362 y79 w100 h30 Center gChonExcel, Chon Excel
+Gui, Start:Add, Button, x182 y129 w100 h30 Center gDirSubmit, Submit
 ; Generated using SmartGUI Creator for SciTE
-Gui 6: Show,, Select Dir GUI
+Gui, Start:Show,, Start GUI
 return
+
 
 ;-------------------Gui-------------------------
 
 ;InputBox, folderloc
 ;folderloc = C:\Users\minhcq\Desktop\New folder (16)\New folder (2)\RT BINH
 start:
-FileSelectFile,baocaoloc,,,,*.xlsx
+;FileSelectFile,baocaoloc,,,,*.xlsx
 ;baocaoloc = %A_Desktop%\My_Hybris_The One.xlsx
 
 baocao := ComObjCreate("Excel.Application") 
@@ -196,9 +202,19 @@ Gui 6: Destroy
 goto, start
 return
 
+ChonExcel:
+FileSelectFile,baocaoloc,,,,*.xlsx
+GuiControl, Start:, baocaoloc, %baocaoloc%
+return
+
 DirSubmit:
-Gui 6: Submit
+Gui, Start: Submit
+FileDelete, Lastdir.txt
+FileAppend,%folderloc%,LastDir.txt,UTF-8
+FileDelete, LastExcel.txt
+FileAppend,%baocaoloc%,LastExcel.txt,UTF-8
 goto, start
+;goto, start
 return
 
 Gui7Close:
@@ -2119,6 +2135,91 @@ Loop
 until (varID = "")
 return
 
+;Saithuoctinh:
+Gui 5:submit
+Gui 5: Submit
+GuiControl,1:,AppStatus, Label %A_ThisLabel%
+WinMove, Hybrid 3.0,, -60
+Winset, Trans, 199, Hybrid 3.0
+Loop
+{
+	gosub, starttime
+	gosub, excel
+	If (varID = "")
+	{
+		MsgBox, Không còn gì để tạo đâu
+		return
+	}
+		varCurrent = %varID%
+		GuiControl, 1:, Current, %varCurrent%
+		gosub, Progress1
+		WinActivate, ahk_exe chrome.exe
+		sleep, 200
+		gosub,CheckDone
+		gosub, FindID
+		sleep,100
+		gosub, Checkloading
+		sleep,100
+		gosub, CheckDone
+		sleep,100
+		gosub, checkDatimthay
+		ImageSearch,,yPFound,489, 459,1571, 536 , PNG\waitforqc.png
+		If (yPFound <> ""){
+			baocao.range("K" . Row ).value := "Wait for QC"
+		}
+
+		else
+		{
+			sleep,300
+			click, 564, 502 left, 1 ;click picture
+
+			sleep, 400
+			Loop
+			{
+				PixelGetColor, pxcheck, 1900, 883
+				timeout++
+				If (timeout = 200)
+				{
+					MsgBox, Timeout
+					return
+				}
+			}
+			until pxcheck = 0xFFFFFF ;check đã click sp
+			sleep, 500
+			;switch tab category
+			click, 562, 715 left, 1
+			sleep,400
+			ImageSearch,xLocnuoc,yLocnuoc, 1869, 412,1923, 449, PNG\maylocnuoc.png
+			yLocnuoc := yLocnuoc +10
+			ImageSearch, bachamX, bachamY, 227, 793, 1028, 960, PNG\bacham.png				
+			If ErrorLevel
+			{
+				MsgBox, Loi - Tu lam
+				Continue
+			}
+			click, %bachamX%-60, %bachamY% left, 1
+			send, 3325600291017
+			sleep, 400
+			gosub, checkDone
+			sleep, 200
+			gosub, CheckSave
+			sleep, 300
+			click, 1882, 658 left, 1 ; click save
+			gosub, checkSaveDone
+			gosub, CheckDone
+			click, 1014, yLocnuoc left, 1
+			sleep, 300
+			click, 1882, 658 left, 1 ; click save
+			gosub, checkSaveDone
+			gosub, CheckDone
+			}
+
+			gosub,endtime
+
+	Row++
+		}
+until (varID = "")
+return
 ;------------------------------------------------------------------------------------------------------Funtion-----------------------------------------------------------------------
 
 AutoMapMediaContainerSP()

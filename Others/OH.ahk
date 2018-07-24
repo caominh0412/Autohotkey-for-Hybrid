@@ -85,7 +85,9 @@ return
 Next:
 `::
 Row++
-goto,search
+Gosub, search
+click, 507, 226 left, 3
+goto, com
 return
 
 Folder:
@@ -112,12 +114,18 @@ Row--
 goto,search
 return
 
+com:
 F1::
 ;click,559, 58 left,1
 ;sleep,50
 ;send, ^a
 ;sleep,50
 SendRaw, %Barcode%`n
+sleep, 600
+click, 564, 502 left, 1 ;click picture
+sleep, 300
+click , 862, 814 left, 1
+send, 3325600291017
 return
 
 F2::
@@ -125,7 +133,7 @@ F2::
 ;sleep,50
 ;send, ^a
 ;sleep,50
-SendRaw %name%
+SendRaw %name%n
 return
 
 
@@ -193,5 +201,5 @@ Save:
 MouseGetPos, X, Y
 Click, 1889, 614 left, 1
 sleep, 100
-MouseMove, %X%, %Y%
+MouseMove, 1013, 785 
 return

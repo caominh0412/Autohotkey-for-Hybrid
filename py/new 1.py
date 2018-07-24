@@ -3,7 +3,7 @@ import requests
 from urllib.request import urlopen as uReq
 from bs4 import BeautifulSoup as soup
 
-my_url = 'https://www.adayroi.com/TRIUMPH-mc13257?q=&page=0'
+my_url = 'https://www.adayroi.com/do-mac-nha-c1913?q=%3Aprice-asc%3Abrand%3Abr24756&page=1'
 print(my_url)
 uClient = uReq(my_url)
 page_html = uClient.read()
@@ -11,7 +11,7 @@ uClient.close()
 page_soup = soup(page_html,"html.parser")
 #find_count = page_soup.findAll('span',{'class':'header__search-result'})[0].text.strip('Tìm thấy sản phẩm')
 items=page_soup.findAll("div",{"class":"product-item__container"})
-filename = 'product_1.doc'
+filename = 'product_2.doc'
 f = open(filename, "w", encoding="utf-8")
 headers = "Name,Price\n"
 f.write("")
