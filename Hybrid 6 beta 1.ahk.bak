@@ -291,7 +291,7 @@ Loop
 		; Xoas anh da co
         Loop
         {
-           PixelSearch, Px, Py, 492, 694, 1858, 883, 0x2423EE ,3, fast
+            PixelSearch, Px, Py, 500, 644, 1866, 838, 0x2c1beb ,3, fast
 			Px := Px + 5
 			Py := Py + 5
 			click, %Px%, %Py%, left, 1
