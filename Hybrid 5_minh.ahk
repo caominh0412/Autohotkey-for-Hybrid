@@ -83,7 +83,7 @@ Gui 1: Add, Button,x92 y99 w90 h30 gResetCount, ResetCount
 Gui 1: Add, Button, x92 y519 w80 h30 , Open Chrome
 Gui 1: Add, Button, x92 y549 w80 h30 , Quit
 
-Gui 1: Add, Button, x92 y69 w90 h30 , Button
+Gui 1: Add, Button, x92 y69 w90 h30 gCheckfolder, Check Folder
 Gui 1: Add, Text, x12 y579 w170 h30 , Giữ chỗ
 ; Generated using SmartGUI Creator for SciTE
 Gui 1: +AlwaysOnTop
@@ -1131,7 +1131,7 @@ Loop
 		sleep, 500
 		click, 752, 712 left, 1
 		sleep, 400
-		click, 1012, 991  left,1
+		click , 1015, 824  left,1
 		sleep, 1000
 		Loop
 		{
@@ -1156,7 +1156,7 @@ Loop
 		sleep, 400
 		gosub, checkDone
 		sleep, 300
-		click, 1011, 1033 left, 1
+		click, 1009, 878 left, 1
 		sleep, 400
 		Loop
 		{
@@ -1208,7 +1208,7 @@ Loop
 			a:=ContainerCount()
 			sleep,100
 			b:=AutoMapMediaContainerSP()
-			If (a<>b)
+			If (a<>b and a<>fdcount)
 			{
 				MsgBox, Check lai
 			}
@@ -1758,6 +1758,7 @@ Loop
 		sleep, 700
 		; Click end -> Cuối trang
 		send, {END}
+		sleep, 200
 		Loop
 		{
 			PixelGetColor, pxcheck, 1084, 1037
@@ -1814,7 +1815,7 @@ Loop
 		until pxcheck = 0x797876
 		sleep, 300
 		click, 1116, 299 left, 1
-		sleep, 1800
+		sleep, 3000
 		; Switch to hybris
 		send, ^1
 		if (upconfig = 1)
@@ -1831,6 +1832,18 @@ Loop
 		sleep, 500
 		; switch tab multimedia
 		click, 743, 713 left,  1
+		CheckMau(1730, 965,0xFFFFFF,100)
+		ImageSearch, X, Y, 228, 863, 1038, 1012, PNG\_1].png
+		If (X <> "")
+		{
+			sleep, 300
+			click, 564, 502 left, 1 ;click picture
+			sleep, 400
+			CheckMau(1900,883,0xFFFFFF,200)
+			sleep, 500
+			; switch tab multimedia
+			click, 743, 713 left,  1
+		}
 		sleep, 400
 		; click gallery image
 		click, 252, 878 left, 2
@@ -1879,7 +1892,7 @@ Loop
 			click, 1107, 224 left, 1
 			sleep, 300
 			; Loop ảnh 2 -> fdcound -> đổi identifier -> Save
-			XAnh_All:=[260,290,320,350,380,410,440]
+			XAnh_All:=[260,290,320,350,380,410,440,470,500,530]
 			;MsgBox, %fdcount3%
 			for index, element in XAnh_All
 			{
@@ -1892,13 +1905,30 @@ Loop
 				;MsgBox, %XAnh%
 				click, 1205, %XAnh% left,1
 				sleep, 200
-				click, 776, 380 left, 3
+				click, 951, 544 left, 2
+				Loop
+				{
+					PixelGetColor, pxcheck, 1905, 575
+				}
+				until pxcheck = 0x53463C
+				sleep, 200
+				click, 739, 382 left, 3
+				sleep,100
+				send, %varID%_%sttanh%
+				sleep, 400
+				click, 1244, 233 left, 1
+				sleep, 200
+				checkmau(1916,575,0x887E76)
+				click, 791, 416 left, 3
 				sleep, 100
 				send, %varID%_%sttanh%
-				sleep, 600
-				click, 1073, 235 left, 1
-				sleep, 500
-				;MsgBox, check
+				sleep, 200
+				checkmau(1092, 269,maunutsave)
+				click, 1075, 269 left, 1
+				sleep, 400
+				click, 1107, 224 left, 1
+				sleep, 300
+					;MsgBox, check
 			}
 			sleep, 300
 			click, 1264, 183 left, 1
@@ -2022,14 +2052,7 @@ Loop
 		WinActivate, ahk_exe chrome.exe
 		sleep, 200
 		gosub,CheckDone
-		gosub, FindID
-		sleep,100
-		gosub, Checkloading
-		sleep,100
-		gosub, CheckDone
-		sleep,200
-		gosub, checkDatimthay
-		sleep, 300
+		find(varID)
 		ImageSearch,,yPFound, 1869, 412,1923, 449, PNG\0items.png
 		If (yPFound <> ""){
 			baocao.range("E" . Row ).value := "SP bi loi"
@@ -2120,6 +2143,7 @@ Loop
 					{
 						send, VVC9957`n
 					}
+					baocao.range("E" . Row ).value := "Da doi"
 					sleep, 700,
 					Loop
 					{
@@ -2244,6 +2268,31 @@ Loop
 		}
 until (varID = "")
 return
+
+Checkfolder:
+GuiControl,1:,AppStatus, Label %A_ThisLabel%
+WinMove, Hybrid 3.0,, -60
+Winset, Trans, 199, Hybrid 3.0
+Loop
+{
+	gosub, starttime
+	gosub, excel
+	If (varID = "")
+	{
+		return
+	}
+	If (fdcount > 0)
+	{
+		baocao.range("AA" . Row ).value := fdcount
+	}
+	else
+	{
+		MsgBox, Dong %row% chua co anh
+	}
+	Row++
+}
+until (varID = "")
+return
 ;------------------------------------------------------------------------------------------------------Funtion-----------------------------------------------------------------------
 
 
@@ -2261,7 +2310,7 @@ varBienthe := baocao.range("D" . Row ).value
 StringReplace,varID,varID, .000000,,
 StringReplace,varBienthe,varBienthe, .000000,,
 StringReplace,varBarcode,varBarcode, .000000,,
-if (varID = "")
+if (varID = "" and varBienthe <> "")
 {
 	varID := varIDtruoc
 	varBarcode := varBarcodetruoc

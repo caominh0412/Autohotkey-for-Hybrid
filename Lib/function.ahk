@@ -143,14 +143,18 @@ find(var)
 	click, 637, 228 left,3
 	sleep, 200
 	SendRaw, %var%`n
-	sleep,300
+	sleep,400
 	Checkloading()
-	sleep,300
+	sleep,400
 	CheckDone()
-	sleep,300
+	sleep,400
 	CheckDaTimthay()
 	click, 564, 502 left, 1 ;click picture
 	sleep, 400
+	ImageSearch,,yPFound, 1869, 412,1923, 449, PNG\0items.png
+	If (yPFound <> ""){
+		baocao.range("E" . Row ).value := "SP bi loi"
+	}
 	;CheckMau(1900,883,0xFFFFFF,200)
 }
 
