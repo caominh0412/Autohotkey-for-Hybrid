@@ -3,11 +3,12 @@
 global maubangtao =   0x8F8781 ; màu bảng tạo 1900, 180
 global maudodatao = 0x4E4EF4 ; màu đỏ đã tạo 1196, 236
 global maudatimthay = 0xF1EDEA  ; màu đã tìm thấy sp 1874, 608
-global maunutsave =  0x42DFFB ; màu nút save  1902,658 0x2BDFFC
+global maunutsave =  0x42DEFB ; màu nút save  1902,658 0x2BDFFC
 global mauloading =0x664C3C ; màu xám loading quay quay 960,518
 global mausavedone = 0xE4DAD2 ; màu nút savedone
 global maunutconvert = 0x76583F ;màu nút convert
 #Include, Lib\function.ahk
+;#Include, Lib\gdip.ahk
 
 ;---------------------------------------------
 /*
@@ -83,8 +84,8 @@ Gui 1: Add, Button,x92 y99 w90 h30 gResetCount, ResetCount
 Gui 1: Add, Button, x92 y519 w80 h30 , Open Chrome
 Gui 1: Add, Button, x92 y549 w80 h30 , Quit
 
-Gui 1: Add, Button, x92 y69 w90 h30 gCheckfolder, Check Folder
-Gui 1: Add, Text, x12 y579 w170 h30 , Giữ chỗ
+Gui 1: Add, Button, x92 y69 w90 h30 gOld, Check Folder
+Gui 1: Add, Picture, x12 y579 w170 h170 vAnh +0xE
 ; Generated using SmartGUI Creator for SciTE
 Gui 1: +AlwaysOnTop
 Gui 1: Show, x0 y90, Hybrid 6.0
@@ -129,6 +130,14 @@ Gui 7: Font, s32  ; Set a large font size (32-point).WinSet, TransColor, %Custom
 Gui 8: Add, Button, x112 y10 w100 h30 gUpThoitrang, Thoitrang
 Gui 8: Add, Button, x2 y10 w100 h30 gUpsanpham, San pham
 Gui 8: +AlwaysOnTop +LastFound +ToolWindow
+
+Gui 9: Add, Button,  w170 h30 gAutoCreateContainer, Create Container 
+Gui 9: Add, Button,  w170 h30 gAutoCreatePicture, Create Product Media
+Gui 9: Add, Button, w170 h30 gUp, Up ảnh +map - Product Media
+Gui 9: Add, Button,  w170 h30 gMap, Map ảnh - Product Media
+Gui 9: Add, Button,  w170 h30 gMapContainSP, Map Container vào Sản phẩm 
+Gui 9: Add, Button,  w170 h30 gConvert, Convert - Container
+Gui 9: Add, Button,  w170 h30 gManualSetting, Manual Setting
 return
 
 NewUpChon:
@@ -143,6 +152,10 @@ GuiControl,2:,  yFolder, %yFolder%
 GuiControl,2:, yQualifier, %yQualifier%
 GuiControl,2:, yCatContainer, %yCatContainer%
 Gui 2: Show, w241 h252 , Setting GUI
+return
+
+Old:
+Gui 9: Show
 return
 
 MousePos:
@@ -568,56 +581,6 @@ Loop
 		sendraw, %varFolder%\%varBarcode%_%fdcount2%.jpg`n
 		sleep,400
 		gosub checkMap
-		IfNotInString, checkmap, %varID% ;check da map chưa
-		{
-			click, 1376, 877 left, 1
-			sleep, 200
-			send, {END}
-			;map
-			sleep, 500
-			click, 1015, 905 left, 1
-			sleep, 300
-			Loop
-			{
-				PixelGetColor, pxcheck, 1607, 490
-				GuiControl, 1:, GuiPxcheck,  %pxcheck%
-			}
-			until pxcheck = 0xFFFFFF ;check da hien bảng chọn ?
-			sleep, 300
-			Loop
-			{
-				PixelGetColor, pxcheck, 1625, 429
-			}
-			until pxcheck = 0xFFFFFF
-			sleep, 600
-			;click, 518, 295 left, 1
-			;sleep, 400
-			;click, 496, 321 left, 1
-			;sleep, 500
-			click,660, 294 left, 1
-			sleep, 200
-			send, %varID%_%fdcount2%`n
-			sleep, 500
-			gosub, checkLoading
-			Loop
-			{
-				PixelGetColor, pxcheck, 1607, 490
-				GuiControl, 1:, GuiPxcheck,  %pxcheck%
-			}
-			until pxcheck = 0xFFFFFF
-			sleep, 700
-			click, 585, 519 left, 1
-			sleep, 500
-			click, 1603, 862 left, 1
-			sleep, 300
-			gosub, checkDone
-			sleep,400
-			gosub, checkMap
-			IfNotInString, checkmap, %varID%
-			MsgBox, Check lại map trước khi OK?
-			WinActivate, ahk_exe chrome.exe
-			sleep,300
-		}
 		gosub, CheckSave
 		sleep, 300
 		click, 1882, 658 left, 1 ; click save
@@ -1003,7 +966,6 @@ WinMove, Hybrid 3.0,, -60
 Winset, Trans, 199, Hybrid 3.0
 Loop
 {
-	gosub, starttime
 	fdcount2:=1
 	If (varPause = 1)
 	{
@@ -1012,7 +974,7 @@ Loop
 	gosub, excel
 	If (varID = "")
 	{
-		MsgBox, Không còn gì để tạo đâu
+		MsgBox, 4096, Thông báo, Không còn gì de tao dâu
 		return
 	}
 	Loop
@@ -1032,28 +994,59 @@ Loop
 		sleep,300
 		gosub, checkDatimthay
 		sleep,300
-		click, 462, 462 left, 1 ;click picture
-		sleep, 400
+		
+		MouseMove, 282, 467 
 		Loop
 		{
-			PixelGetColor, pxcheck, 1900, 883
-			GuiControl, 1:, GuiPxcheck,  %pxcheck%
-			timeout++
-			If (timeout = 200)
-			{
-				return
-			}
+		PixelGetColor,pxcheck,282, 467 
 		}
-		until pxcheck = 0xFFFFFF ;check đã click sp
-		sleep, 400
+		until pxcheck=0xF6F1EA
+		click,282, 467  left,1
+		Loop
+		{
+		PixelGetColor,pxcheck,983, 768
+		}
+		until pxcheck=0xFFFFFF
+		
 		gosub, checkConvert
 		IfNotInstring, checkConvert, Fashion Product Image Conversion Group
 		{
-			click, 283, 845 left, 1
+			click, 538, 846 left, 1
 			sleep, 300
 			SendRaw, Fashion Product Image Conversion Group
-			sleep, 600
+			sleep, 800
 			click,420, 875 left, 1
+			sleep,300
+			{
+				gosub, checkConvert
+				IfNotInstring, checkConvert, Fashion Product Image Conversion Group
+				{
+					MsgBox, Loi
+				}
+				click, 1844, 941 left, 1
+				Loop
+				{
+					PixelGetColor, pxcheck, 1691, 549
+				}
+				until pxcheck = 0x887E76
+				;map
+				click,660, 294 left, 1
+				sleep, 200
+				send, %varCurrent%`n
+				sleep, 700,
+				mousemove, 407, 522
+				Loop
+				{
+					PixelGetColor,pxcheck,407, 522
+				}
+				until pxcheck=0xF6F1EA
+				click, 407, 522 left, 1
+				sleep, 500
+				click, 1603, 862 left, 1
+				sleep, 300
+				gosub, checkDone
+				sleep,400
+			}
 			gosub, CheckSave
 			sleep, 300
 			click, 1882, 658 left, 1 ; click save
@@ -1061,25 +1054,10 @@ Loop
 			gosub, checkSaveDone
 			gosub, CheckDone
 			sleep, 300
-		}
-		PixelGetColor, pxcheck, 1063, 1007
-		gosub, checkmapanh
-		if (pxcheck = maunutconvert) ;màu nút convert
-		{
-			click, 1063, 1007 left, 1
-			sleep,50
-			MouseMove,0,0
-			sleep, 300
-			Loop
-			{
-				PixelGetColor, pxcheck, 1063, 1007
-			}
-			until pxcheck <> maunutconvert
-		}
+		}		
 		fdcount2++
 	}
 	until (fdcount2 > fdcount)
-	gosub, endtime
 	Row++
 }
 until (varID ="")
@@ -1716,6 +1694,17 @@ Gui 7:Destroy
 return
 
 NewUp:
+;ID:	1040455 - 832000
+;Bien the: 1037656 - 824023
+/*
+[Fresh] Đức Min: 	748344
+[Fresh] Nam: 		801158
+[Fresh] Quý: 		832000 - 824023
+[ICT] Ngọc Anh: 846592 - mã Fresh: 846589
+Fashion] Ngọc Anh: 1066341 - 1071644
+[Fashion] Bình Toon: 981365
+[Fresh] Thùy Dương: 1040455 - 1037656
+*/
 Loop
 {
 	starttime:=starttime()
@@ -1818,31 +1807,30 @@ Loop
 		sleep, 3000
 		; Switch to hybris
 		send, ^1
-		if (upconfig = 1)
+		Loop,
 		{
-			find(824023)    ; Find biến thể 824023
-		}
-		if (upconfig = 2)
-		{
-			find(990802)    ; Find biến thể 824023
-		}
-		click, 564, 502 left, 1 ;click picture
-		sleep, 400
-		CheckMau(1900,883,0xFFFFFF,200)
-		sleep, 500
-		; switch tab multimedia
-		click, 743, 713 left,  1
-		CheckMau(1730, 965,0xFFFFFF,100)
-		ImageSearch, X, Y, 228, 863, 1038, 1012, PNG\_1].png
-		If (X <> "")
-		{
-			sleep, 300
+			if (upconfig = 1)
+			{
+				find(1037656)    ; Find biến thể 824023
+			}
+			if (upconfig = 2)
+			{
+				find(1071644)    ; Find biến thể 824023
+			}
 			click, 564, 502 left, 1 ;click picture
 			sleep, 400
 			CheckMau(1900,883,0xFFFFFF,200)
 			sleep, 500
 			; switch tab multimedia
 			click, 743, 713 left,  1
+			sleep, 300
+			CheckMau(1730, 965,0xFFFFFF,100)
+
+			ImageSearch, X, Y, 228, 863, 1038, 1012, PNG\_1].png
+			If (X = "")
+			{
+				break
+			}
 		}
 		sleep, 400
 		; click gallery image
@@ -1931,9 +1919,12 @@ Loop
 					;MsgBox, check
 			}
 			sleep, 300
-			click, 1264, 183 left, 1
+			click, 1264, 183 left, 1	
+			sleep, 300	
+	
 		}
 	}
+	CheckMau(1902,193,"0xFFFFFF")
 	endtime:=endtime()
 	gosub, Conlaitime
 	Row++
@@ -2060,7 +2051,6 @@ Loop
 
 		else
 		{
-			click, 564, 502 left, 1 ;click picture
 
 			sleep, 400
 			Loop
@@ -2332,11 +2322,13 @@ loop, %varFolder%\%varBarcode%_*.jpeg
 {
 	fdcount ++
 }
+varAnh = %varFolder%\%varBarcode%_1.jpg
 GuiControl, 1:, ID, %varID%
 GuiControl, 1:, Bienthe, %varBienthe%
 GuiControl, 1:, Barcode , %varBarcode%
 GuiControl, 1:, GSoAnh, Số ảnh: %fdcount%
 GuiControl, 1:, GuiRow , Dòng số: %Row%
+GuiControl, 1:, Anh, %varAnh%
 return
 
 
@@ -2404,3 +2396,5 @@ timedisplay:= timecount(starttime,endtime,row,count,besttime)
 GuiControl, 1:, Estimated,% "Còn lại: "timedisplay.hour ":" timedisplay.min ":" timedisplay.sec "- Last time :" timedisplay.lastrowtime " Best time: " besttime
 }
 return
+
+;

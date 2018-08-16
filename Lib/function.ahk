@@ -191,7 +191,7 @@ CheckMau(X,Y,Color,time:=0)
 			timeout++
 		}			
 	}
-	until (pxcheck = Color)  ;check đã tìm thấy
+	until (pxcheck = Color or timeout > time)  ;check đã tìm thấy
 }
 
 CheckDaTao()
