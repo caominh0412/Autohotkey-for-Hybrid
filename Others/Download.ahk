@@ -7,9 +7,9 @@ Row := 1
 Loop,
 {
 	baocao.Range("A" . Row, "W" . Row ).Interior.ColorIndex := 43
-	barcode := baocao.range( "B" . Row ).value
-	StringReplace, barcode,barcode, ".000000" ,, All]
-	FileCreateDir, %A_Desktop%\Mozlet\%barcode%
+	barcode := baocao.range( "A" . Row ).value
+	StringReplace, barcode,barcode, ".000000" ,, All
+	FileCreateDir, %A_Desktop%\download1\%barcode%
 	If ErrorLevel
 	{
 		MsgBox, Tao Folder loi
@@ -17,7 +17,7 @@ Loop,
 	}
 	Else
 	{
-			Colume := ["C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W"]
+			Colume := ["B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W"]
 		For index, element in Colume
 		{
 			link := baocao.range(element . Row ).value
@@ -25,13 +25,13 @@ Loop,
 			IfInString, link, https
 			{
 		
-				UrlDownloadToFile, %link% , %A_Desktop%\Mozlet\%barcode%\%barcode%_%index%.jpg
+				UrlDownloadToFile, %link% , %A_Desktop%\download1\%barcode%\%barcode%_%index%.jpg
 				If ErrorLevel
 				{
-					UrlDownloadToFile, %link% , %A_Desktop%\Mozlet\%barcode%\%barcode%_%index%.jpg
+					UrlDownloadToFile, %link% , %A_Desktop%\download1\%barcode%\%barcode%_%index%.jpg
 					If ErrorLevel
 					{
-						MsgBox,File: %A_Desktop%\Mozlet\%barcode%\%barcode%_%index%.jpg`nLink: %link%
+						MsgBox,File: %A_Desktop%\download1\%barcode%\%barcode%_%index%.jpg`nLink: %link%
 						baocao.Range(element . Row).Interior.ColorIndex := 33
 					}
 				}

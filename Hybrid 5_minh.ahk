@@ -81,11 +81,11 @@ Gui 1: Add, Button, x12 y549 w80 h30 gReset, Reset
 Gui 1: Add, Button, x12 y519 w80 h30 gDoiten, Đổi tên
 
 Gui 1: Add, Button,x92 y99 w90 h30 gResetCount, ResetCount
-Gui 1: Add, Button, x92 y519 w80 h30 , Open Chrome
-Gui 1: Add, Button, x92 y549 w80 h30 , Quit
+Gui 1: Add, Button, x92 y519 w80 h30 gOld, Up cu
+Gui 1: Add, Button, x92 y549 w80 h30 gGuiClose, Quit
 
-Gui 1: Add, Button, x92 y69 w90 h30 gOld, Check Folder
-Gui 1: Add, Picture, x12 y579 w170 h170 vAnh +0xE
+Gui 1: Add, Button, x92 y69 w90 h30 gCheckFolder, Check Folder
+Gui 1: Add, Picture, x12 y579 w170 h170 vAnh +0xE +0x40
 ; Generated using SmartGUI Creator for SciTE
 Gui 1: +AlwaysOnTop
 Gui 1: Show, x0 y90, Hybrid 6.0
@@ -137,7 +137,16 @@ Gui 9: Add, Button, w170 h30 gUp, Up ảnh +map - Product Media
 Gui 9: Add, Button,  w170 h30 gMap, Map ảnh - Product Media
 Gui 9: Add, Button,  w170 h30 gMapContainSP, Map Container vào Sản phẩm 
 Gui 9: Add, Button,  w170 h30 gConvert, Convert - Container
+Gui 9: Add, Button, w170 h30 gSettingProductMedia, Product Media
+Gui 9: Add, Button, w170 h30 gSettingContainer, Container
 Gui 9: Add, Button,  w170 h30 gManualSetting, Manual Setting
+Gui 9: Add, Button,  w15 h15 gId1, 1
+Gui 9: Add, Button, x+5 w15 h15 gId2, 2
+Gui 9: Add, Button, x+5 w15 h15 gId3, 3
+Gui 9: Add, Button, x+5 w15 h15 gId4, 4
+Gui 9: Add, Button, x+5 w15 h15 gId5, 5
+Gui 9: Add, Button, x+5 w15 h15 gId6, 6
+Gui 9: +AlwaysOnTop
 return
 
 NewUpChon:
@@ -200,6 +209,7 @@ Run, C:\GoTiengViet\GoTiengViet.exe
 FileDelete, Lastdir.txt
 FileAppend,%folderloc%,LastDir.txt,UTF-8
 baocao.Workbooks.Close()
+WinActivate, ahk_exe Excel.exe
 ExitApp
 
 Otherthings:
@@ -318,18 +328,19 @@ Doiten:
 Run, Others\doi ten.ahk
 
 Next:
-f1::
+`::
 GuiControl,1:, ProgressBar, 0
 varIDtruoc := varID
 baocao.Range("A" . Row, "J" . Row ).Interior.ColorIndex := 0
 Row++
 baocao.Range("A" . Row, "J" . Row ).Interior.ColorIndex := 43
-varCurrent := varID
+
 gosub, excel
 IF (varBarcode ="")
 {
 	MsgBox, DONE
 }
+varCurrent := varID_1
 return
 
 Back:
@@ -875,7 +886,6 @@ Winset, Trans, 199, Hybrid 3.0
 Loop
 {
 	gosub, starttime
-	fdcount2:=1
 	If (varPause = 1)
 	{
 		return
@@ -886,72 +896,19 @@ Loop
 		MsgBox, Không còn gì để tạo đâu
 		return
 	}
+	fdcount2:=1
 	if (fdcount >=1)
-	{
-	Loop
-	{
-		varCurrent = %varID%_%fdcount2%
-		GuiControl, 1:, Current, %varCurrent%
-		gosub, Progress1
-		WinActivate, ahk_exe chrome.exe
-		sleep, 200
-		gosub,CheckDone
-		gosub, FindID
-		sleep,300
-		gosub, Checkloading
-		sleep,300
-		gosub, CheckDone
-		sleep,300
-		gosub, checkDatimthay
-		sleep,300
-		click, 462, 462 left, 1 ;click picture
-		sleep, 400
+		{
 		Loop
 		{
-			PixelGetColor, pxcheck, 1900, 883
-			GuiControl, 1:, GuiPxcheck,  %pxcheck%
-			timeout++
-			If (timeout = 200)
-			{
-				return
-			}
+			varCurrent = %varID%_%fdcount2%
+			gosub, manualConvertSP
+			fdcount2++
 		}
-		until pxcheck = 0xFFFFFF ;check đã click sp
-		sleep, 400
-		gosub, checkConvert
-		IfNotInstring, checkConvert, Fresh Product Image Conversion Group
-		{
-			click, 283, 845 left, 1
-			sleep, 300
-			SendRaw, Fresh Product Image Conversion Group
-			sleep, 600
-			click,420, 875 left, 1
-			gosub, CheckSave
-			sleep, 300
-			click, 1882, 658 left, 1 ; click save
-			sleep,200
-			gosub, checkSaveDone
-			gosub, CheckDone
-			sleep, 300
-		}
-		PixelGetColor, pxcheck, 1063, 1007
-		gosub, checkmapanh
-		if (pxcheck = maunutconvert)  ;màu nút convert
-		{
-			click, 1063, 1007 left, 1
-			sleep,50
-			MouseMove,0,0
-			sleep, 300
-			Loop
-			{
-				PixelGetColor, pxcheck, 1063, 1007
-			}
-			until pxcheck <>  maunutconvert
-		}
-		fdcount2++
+		until (fdcount2 > fdcount)
 	}
-	until (fdcount2 > fdcount)
-}
+	gosub, checkSaveDone
+	gosub, CheckDone
 	gosub, endtime
 	Row++
 }
@@ -1079,129 +1036,7 @@ Loop
 	}
 	if (fdcount>=1)
 	{
-		varCurrent = %varID%
-		Clipboard = ""
-		GuiControl, 1:, Current, %varCurrent%
-		gosub, Progress1
-		WinActivate, ahk_exe chrome.exe
-		sleep, 200
-		gosub,CheckDone
-		gosub, FindID
-		sleep,300
-		gosub, Checkloading
-		sleep,300
-		gosub, CheckDone
-		sleep,300
-		gosub, checkDatimthay
-		sleep,300
-		click, 564, 502 left, 1 ;click picture
-		sleep, 400
-		Loop
-		{
-			PixelGetColor, pxcheck, 1900, 883
-			timeout++
-			If (timeout = 200)
-			{
-				return
-			}
-		}
-		until pxcheck = 0xFFFFFF ;check đã click sp
-		sleep, 500
-		click, 752, 712 left, 1
-		sleep, 400
-		click , 1015, 824  left,1
-		sleep, 1000
-		Loop
-		{
-			PixelGetColor, pxcheck, 1614, 424
-			GuiControl, 1:, GuiPxcheck,  %pxcheck%
-		}
-		until pxcheck = 0xFFFFFF ;check da hien bảng chọn ?
-		sleep, 400
-		click,  691, 293 left, 1
-		sleep, 300
-		sendraw, %varID%_1`n
-		sleep, 400
-		Loop
-		{
-			PixelGetColor, pxcheck, 1614, 424
-			GuiControl, 1:, GuiPxcheck,  %pxcheck%
-		}
-		until pxcheck = 0xFFFFFF ;check da hien bảng chọn ?
-		click, 648, 521 left, 1
-		sleep, 300
-		click, 1611, 868 left, 1
-		sleep, 400
-		gosub, checkDone
-		sleep, 300
-		click, 1009, 878 left, 1
-		sleep, 400
-		Loop
-		{
-			PixelGetColor, pxcheck, 1614, 424
-			GuiControl, 1:, GuiPxcheck,  %pxcheck%
-		}
-		until pxcheck = 0xFFFFFF ;check da hien bảng chọn ?
-		sleep, 700
-		Loop
-		{
-			PixelGetColor, pxcheck, 1614, 424
-		}
-		until pxcheck = 0xFFFFFF
-		If (fdcount = 1)
-		{
-			click,660, 294 left, 1
-			sleep, 200
-			send, %varID%_1`n
-			sleep, 700,
-			Loop
-			{
-				PixelGetColor, pxcheck, 1607, 490
-				GuiControl, 1:, GuiPxcheck,  %pxcheck%
-			}
-			until pxcheck = 0xFFFFFF
-			sleep, 700
-			click, 585, 519 left, 1
-			sleep, 500
-			click, 1603, 862 left, 1
-		}
-		else
-		{
-			click, 509, 293 left, 1
-			sleep, 600
-			click, 509, 346  left, 1
-			sleep, 300
-			click,  691, 293 left, 1
-			sleep, 300
-			sendraw, %varID%`n
-			sleep, 1400
-			gosub, Checkloading
-			Loop
-			{
-				PixelGetColor, pxcheck, 1607, 490
-				GuiControl, 1:, GuiPxcheck,  %pxcheck%
-			}
-			until pxcheck = 0xFFFFFF
-			sleep,100
-			a:=ContainerCount()
-			sleep,100
-			b:=AutoMapMediaContainerSP()
-			If (a<>b and a<>fdcount)
-			{
-				MsgBox, Check lai
-			}
-			else
-			{
-				click, 1611, 868 left, 1
-			}
-		}
-		sleep, 400
-		gosub, checkDone
-		sleep, 200
-		gosub, CheckSave
-		sleep, 300
-		click, 1882, 658 left, 1 ; click save
-		sleep,200
+		gosub, ManualMapSP
 		gosub, checkSaveDone
 		gosub, CheckDone
 	}
@@ -1486,26 +1321,16 @@ Loop
 		}
 		until pxcheck = 0xFFFFFF ;check đã click sp
 		sleep,400
+		click, 752, 712 left, 1
+		sleep, 400
+		;check map
+		Clipboard := ""
+		click, 1127, 86 left, 1
+		If (Clipboard = "")
+		{
+			MsgBox, Map loi
+		}
 		qcstate := CheckQC()
-		/*
-		If (qcstate = "submit")
-		{
-		click, 356, 661 left, 1 ; click submit to  qc
-		sleep,300
-		click, 436, 663 left, 1
-		mousemove, 100, 100
-		}
-		If (qcstage = "approve")
-		{
-		click, 436, 663 left, 1 ; click approve
-		}
-		sleep, 200
-		Loop{
-			mousemove, 100, 100
-			qcstage := CheckQC()
-		}
-		until (qcstage = "qcdone")
-		*/
 		if (qcstate <> "qcdone")
 		{
 			click, 356, 661 left, 1 ; click submit to  qc
@@ -2397,4 +2222,207 @@ GuiControl, 1:, Estimated,% "Còn lại: "timedisplay.hour ":" timedisplay.min "
 }
 return
 
-;
+manualConvertSP:
+f1::
+
+		Clipboard:=""
+		GuiControl, 1:, Current, %varCurrent%
+		gosub, Progress1
+		WinActivate, ahk_exe chrome.exe
+		sleep, 200
+		gosub,CheckDone
+		gosub, FindID
+		sleep,300
+		gosub, Checkloading
+		sleep,300
+		gosub, CheckDone
+		sleep,300
+		gosub, checkDatimthay
+		sleep,300
+		click, 462, 462 left, 1 ;click picture
+		sleep, 400
+		Loop
+		{
+			PixelGetColor, pxcheck, 1900, 883
+			GuiControl, 1:, GuiPxcheck,  %pxcheck%
+			timeout++
+			If (timeout = 200)
+			{
+				return
+			}
+		}
+		until pxcheck = 0xFFFFFF ;check đã click sp
+		sleep, 400
+		gosub, checkConvert
+		IfNotInstring, checkConvert, Fresh Product Image Conversion Group
+		{
+			click, 283, 845 left, 1
+			sleep, 300
+			SendRaw, Fresh Product Image Conversion Group
+			sleep, 600
+			click,420, 875 left, 1
+			gosub, CheckSave
+			sleep, 300
+			{
+				gosub, checkConvert
+				IfNotInstring, checkConvert, Fresh Product Image Conversion Group
+				{
+					MsgBox, Loi
+				}
+				click, 1844, 941 left, 1
+				Loop
+				{
+					PixelGetColor, pxcheck, 1691, 549
+				}
+				until pxcheck = 0x887E76
+				;map
+				click,660, 294 left, 1
+				sleep, 200
+				send, %varCurrent%`n
+				sleep, 700,
+				mousemove, 407, 522
+				Loop
+				{
+					PixelGetColor,pxcheck,407, 522
+				}
+				until pxcheck=0xF6F1EA
+				click, 407, 522 left, 1
+				sleep, 500
+				click, 1603, 862 left, 1
+				sleep, 300
+				gosub, checkDone
+				sleep,400
+			}
+			click, 1882, 658 left, 1 ; click save
+			sleep,200
+		}
+		PixelGetColor, pxcheck, 1063, 1007
+		return
+
+
+ManualMapSP:
+f2::
+		varCurrent = %varID%
+		Clipboard = ""
+		GuiControl, 1:, Current, %varCurrent%
+		gosub, Progress1
+		WinActivate, ahk_exe chrome.exe
+		sleep, 200
+		gosub,CheckDone
+		gosub, FindID
+		sleep,300
+		gosub, Checkloading
+		sleep,300
+		gosub, CheckDone
+		sleep,300
+		gosub, checkDatimthay
+		sleep,300
+		click, 564, 502 left, 1 ;click picture
+		sleep, 400
+		Loop
+		{
+			PixelGetColor, pxcheck, 1900, 883
+			timeout++
+			If (timeout = 200)
+			{
+				return
+			}
+		}
+		until pxcheck = 0xFFFFFF ;check đã click sp
+		sleep, 500
+		click, 752, 712 left, 1
+		sleep, 400
+		click , 1015, 824  left,1
+		sleep, 1000
+		Loop
+		{
+			PixelGetColor, pxcheck, 1614, 424
+			GuiControl, 1:, GuiPxcheck,  %pxcheck%
+		}
+		until pxcheck = 0xFFFFFF ;check da hien bảng chọn ?
+		sleep, 400
+		click,  691, 293 left, 1
+		sleep, 300
+		sendraw, %varID%_1`n
+		sleep, 400
+		Loop
+		{
+			PixelGetColor, pxcheck, 1614, 424
+			GuiControl, 1:, GuiPxcheck,  %pxcheck%
+		}
+		until pxcheck = 0xFFFFFF ;check da hien bảng chọn ?
+		click, 648, 521 left, 1
+		sleep, 300
+		click, 1611, 868 left, 1
+		sleep, 400
+		gosub, checkDone
+		sleep, 300
+		click, 1009, 878 left, 1
+		sleep, 400
+		Loop
+		{
+			PixelGetColor, pxcheck, 1614, 424
+			GuiControl, 1:, GuiPxcheck,  %pxcheck%
+		}
+		until pxcheck = 0xFFFFFF ;check da hien bảng chọn ?
+		sleep, 700
+		Loop
+		{
+			PixelGetColor, pxcheck, 1614, 424
+		}
+		until pxcheck = 0xFFFFFF
+		If (fdcount = 1)
+		{
+			click,660, 294 left, 1
+			sleep, 200
+			send, %varID%_1`n
+			sleep, 700,
+			Loop
+			{
+				PixelGetColor, pxcheck, 1607, 490
+				GuiControl, 1:, GuiPxcheck,  %pxcheck%
+			}
+			until pxcheck = 0xFFFFFF
+			sleep, 700
+			click, 585, 519 left, 1
+			sleep, 500
+			click, 1603, 862 left, 1
+		}
+		else
+		{
+			click, 509, 293 left, 1
+			sleep, 600
+			click, 509, 346  left, 1
+			sleep, 300
+			click,  691, 293 left, 1
+			sleep, 300
+			sendraw, %varID%`n
+			sleep, 1400
+			gosub, Checkloading
+			Loop
+			{
+				PixelGetColor, pxcheck, 1607, 490
+				GuiControl, 1:, GuiPxcheck,  %pxcheck%
+			}
+			until pxcheck = 0xFFFFFF
+			sleep,100
+			a:=ContainerCount()
+			sleep,100
+			b:=AutoMapMediaContainerSP()
+			If (a<>b and a<>fdcount)
+			{
+				MsgBox, Check lai
+			}
+			else
+			{
+				click, 1611, 868 left, 1
+			}
+		}
+		sleep, 400
+		gosub, checkDone
+		sleep, 200
+		gosub, CheckSave
+		sleep, 300
+		click, 1882, 658 left, 1 ; click save
+		sleep,200
+		return

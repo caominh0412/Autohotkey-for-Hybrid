@@ -2,46 +2,40 @@ import bs4
 import requests
 from urllib.request import urlopen as uReq
 from bs4 import BeautifulSoup as soup
+from requests_html import HTMLSession
+import getImage
 
-my_url = 'https://www.adayroi.com/do-mac-nha-c1913?q=%3Aprice-asc%3Abrand%3Abr24756&page=1'
-print(my_url)
-uClient = uReq(my_url)
-page_html = uClient.read()
-uClient.close()
-page_soup = soup(page_html,"html.parser")
-#find_count = page_soup.findAll('span',{'class':'header__search-result'})[0].text.strip('Tìm thấy sản phẩm')
-items=page_soup.findAll("div",{"class":"product-item__container"})
-filename = 'product_2.doc'
+
+
+session = HTMLSession()
+urlcha = 'https://www.adayroi.com/l-occitane-br16959?page='
+filename = 'adayroisua.doc'
 f = open(filename, "w", encoding="utf-8")
-headers = "Name,Price\n"
 f.write("")
-#print('Tìm thấy ' + str(find_count))
-for item in items:
-	#item_picture = items.findAll("a",{"class":"product-item__thumbnail"})
-	item_name = item.findAll("a",{"class":"product-item__info-title"})[0].text
-	item_link = 'https://adayroi.com'+item.findAll("a",{"class":"product-item__info-title"})[0].get('href')
-	#item_link_search_pos = item_link.find('&search')
-	#if item_link_search_pos != "":
-	#	item_link = item_link[:item_link_search_pos]
-	item_price = item.div.div.span.text
-	print("Name: " + item_name)
-	print('Price:' + item_price)
-	print('Link:' + item_link)
-	uClient = uReq(item_link)
-	item_html = uClient.read()
-	uClient.close
-	item_soup = soup(item_html,'html.parser')
-	short_description = item_soup.findAll('li',{'class':'nobullet'})[0].text
-	ID = item_soup.findAll('span',{'class':'panel-serial-number'})[0].text
-	item_images = item_soup.findAll('div',{'data-type':'image'})
-	f.write(item_name + "+" + item_link + "+" + ID  )
-	for item_image in item_images:
-		image_link = item_image.get('data-zoom-image')
-		f.write("+" + image_link)
-	f.write("\n")
-	#long_description = item_soup.findAll('div',{'class':'product-detail__description'})[0].text
-	#print("Short Desription: "+short_description)
-	#print('Long Desription: '+ long_description)
-	#f.write(item_name + "+" +item_price + "+" + item_link + "+" + short_description + "+" + long_description + "\n")
-
+for i in range(0,1):
+	my_url = urlcha + str(i)
+	print(my_url)
+	print('Page:' + str(i))
+	uClient = uReq(my_url)
+	page_html = uClient.read()
+	uClient.close()
+	page_soup = soup(page_html,"html.parser")
+	items=page_soup.findAll("div",{"class":"product-item__container"})
+	#print('Tìm thấy ' + str(find_count))
+	for item in items:
+		#item_picture = items.findAll("a",{"class":"product-item__thumbnail"})
+		item_name = item.findAll("a",{"class":"product-item__info-title"})[0].text
+		item_link = 'https://adayroi.com'+item.findAll("a",{"class":"product-item__info-title"})[0].get('href')
+		#item_link_search_pos = item_link.find('&search')
+		#if item_link_search_pos != "":
+		#	item_link = item_link[:item_link_search_pos]
+		# item_price = item.div.div.span.text
+		print("   Name: " + item_name)
+		# print('Price:' + item_price)
+		print('   Link:' + item_link)
+		item = getImage(item_link)
+		#long_description = item_soup.findAll('div',{'class':'product-detail__description'})[0].text
+		#print("Short Desription: "+short_description)
+		#print('Long Desription: '+ long_description)
+		f.write(item_name + "*" + item_link + "\n")
 f.close()
