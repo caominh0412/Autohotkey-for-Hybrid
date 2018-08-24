@@ -903,12 +903,15 @@ Loop
 		{
 			varCurrent = %varID%_%fdcount2%
 			gosub, manualConvertSP
+			sleep, 200
+			gosub, checkSaveDone
+			gosub, CheckDone
 			fdcount2++
 		}
 		until (fdcount2 > fdcount)
+
 	}
-	gosub, checkSaveDone
-	gosub, CheckDone
+
 	gosub, endtime
 	Row++
 }
@@ -2296,7 +2299,7 @@ f1::
 			click, 1882, 658 left, 1 ; click save
 			sleep,200
 		}
-		PixelGetColor, pxcheck, 1063, 1007
+
 		return
 
 
