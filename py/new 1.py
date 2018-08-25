@@ -3,7 +3,7 @@ import requests
 from urllib.request import urlopen as uReq
 from bs4 import BeautifulSoup as soup
 from requests_html import HTMLSession
-import getImage
+from getImage import getImage
 
 
 
