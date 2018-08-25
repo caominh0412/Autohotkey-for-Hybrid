@@ -24,12 +24,13 @@ if __name__ == '__main__':
 		for item in outputs:
 			print('SKU: '+ item['SKU'])
 			f.write(item['SKU'])
-			imgdownload = folder+'/'+item['SKU']+'/'+item['SKU']+'_'+str(i+1)+'.jpg'
+			
 			#print(imgdownload)
 			makemydir(folder+'/'+item['SKU'])
 			for i in range(0,len(item)-1):
 				f.write('*'+item['image'+str(i)])
 				print(' Image: '+item['image'+str(i)])
+				imgdownload = folder+'/'+item['SKU']+'/'+item['SKU']+'_'+str(i+1)+'.jpg'
 				urllib.request.urlretrieve(item['image'+str(i)],imgdownload)
 			f.write('\n')
 		print('DONE')
