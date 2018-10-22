@@ -148,7 +148,7 @@ find(var)
 	CheckDone()
 	sleep,400
 	CheckDaTimthay()
-	click, 564, 515 left, 1 ;click picture
+	click, 564, 502 left, 1 ;click picture
 	sleep, 400
 	ImageSearch,,yPFound, 1869, 412,1923, 449, PNG\0items.png
 	If (yPFound <> ""){
@@ -191,20 +191,6 @@ CheckMau(X,Y,Color,time:=0)
 		}			
 	}
 	until (pxcheck = Color or timeout > time)  ;check đã tìm thấy
-}
-
-CheckMau2(X,Y,Color,time:=0)
-{
-	timeout:=0
-	Loop
-	{
-		PixelGetColor, pxcheck, %X%, %Y%	
-		if (y > 0 and timeout < time)
-		{
-			timeout++
-		}			
-	}
-	until (pxcheck <> Color or timeout > time)  ;check đã tìm thấy
 }
 
 CheckDaTao()

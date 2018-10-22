@@ -1,11 +1,11 @@
 ﻿;------------------Global Variant---------
 
-global maubangtao =   0x8F8781 ; màu bảng tạo 1900, 180
-global maudodatao = 0x4E4EF4 ; màu đỏ đã tạo 1196, 236
+global maubangtao =   0x887E76 ; màu bảng tạo 1900, 180
+global maudodatao = 0x5449f1 ; màu đỏ đã tạo 1196, 236
 global maudatimthay = 0xF1EDEA  ; màu đã tìm thấy sp 1874, 608
 global maunutsave =  0x42DEFB ; màu nút save  1902,658 0x2BDFFC
 global mauloading =0x664C3C ; màu xám loading quay quay 960,518
-global mausavedone = 0xE4DAD2 ; màu nút savedone
+global mausavedone = 0xE3DAD2 ; màu nút savedone
 global maunutconvert = 0x76583F ;màu nút convert
 #Include, Lib\function.ahk
 ;#Include, Lib\gdip.ahk
@@ -205,7 +205,7 @@ return
 
 GuiClose:
 ^Q::
-Run, C:\GoTiengViet\GoTiengViet.exe
+Run, C:\it-support\GoTiengViet\GoTiengViet.exe
 FileDelete, Lastdir.txt
 FileAppend,%folderloc%,LastDir.txt,UTF-8
 baocao.Workbooks.Close()
@@ -345,7 +345,7 @@ return
 
 Back:
 GuiControl,1:, ProgressBar, 0
-varSpgoctruoc := varSpgoc
+varSpgoctruoc := varSpgoc	
 baocao.Range("A" . Row, "J" . Row ).Interior.ColorIndex := 0
 Row--
 if (Row <= 1)
@@ -443,7 +443,7 @@ Loop
 			WinActivate, ahk_exe chrome.exe
 			sleep, 200
 			gosub,CheckDone
-			click 260, 432 left, 1 ;Nut them
+			click 260, 443 left, 1 ;Nut them
 			sleep, 400
 			;Cho hien ra bang tao
 			gosub, CheckBangTao
@@ -456,7 +456,7 @@ Loop
 			Send, %varCurrent%
 			sleep,500
 			fdcount2++
-			Click, 1200, 535 left,1 ;click done
+			Click, 1200, 545 left,1 ;click done
 			sleep,500
 			timeout:=0
 			gosub, CheckDaTao
@@ -502,7 +502,7 @@ Loop
 		WinActivate, ahk_exe chrome.exe
 		sleep, 200
 		gosub,CheckDone
-		click 258, 393 left, 1 ;Nut them
+		click 258, 403 left, 1 ;Nut them
 		sleep, 400
 		;Cho hien ra bang tao
 		gosub, CheckBangTao
@@ -514,7 +514,7 @@ Loop
 			Send, %varCurrent%
 			sleep,400
 			fdcount2++
-			Click, 1209, 494  left,1 ;click done
+			Click, 1209, 504  left,1 ;click done
 			sleep,500
 			timeout:=0
 			gosub, CheckDaTao
@@ -741,26 +741,26 @@ GuiControl,1:,AppStatus, Label %A_ThisLabel%
 Loop
 {
 	sleep,200
-	PixelGetColor, pxcheck, 1900, 180
+	PixelGetColor, pxcheck, 1804, 1042
 	GuiControl, 1:, GuiPxcheck,  %pxcheck%
 	;MsgBox, %pxcheck%`n%maubangtao%
 }
-Until pxcheck = maubangtao ;Màu tối góc, bảng tạo hiện ra
+Until pxcheck <> 0xFFFFFF ;Màu tối góc, bảng tạo hiện ra
 return
 
 CheckDaTao:
 GuiControl,1:,AppStatus, Label %A_ThisLabel%
 Loop
 {
-	PixelGetColor, pxcheck, 1196, 236
+	PixelGetColor, pxcheck, 778, 596 
 	PixelGetColor, pxcheck2, 1897, 189
 	GuiControl, 1:, GuiPxcheck,  %pxcheck%
 	timeout++
 }
-until (timeout = 100 or pxcheck =maudodatao or pxcheck2 = 0xFFFFFF ) ; màu đỏ đã trùng
-if (pxcheck = maudodatao)
+until (timeout = 100 or pxcheck =0xFFFFFF or pxcheck2 = 0xFFFFFF ) ; màu đỏ đã trùng
+if (pxcheck = 0xFFFFFF)
 {
-	click, 1144, 622 left,1
+	click, 1157, 576 left,1
 	sleep, 200
 	click, 1149, 524 left, 1
 	sleep, 200
@@ -983,29 +983,6 @@ Loop
 				{
 					MsgBox, Loi
 				}
-				click, 1844, 941 left, 1
-				Loop
-				{
-					PixelGetColor, pxcheck, 1691, 549
-				}
-				until pxcheck = 0x887E76
-				;map
-				click,660, 294 left, 1
-				sleep, 200
-				send, %varCurrent%`n
-				sleep, 700,
-				mousemove, 407, 522
-				Loop
-				{
-					PixelGetColor,pxcheck,407, 522
-				}
-				until pxcheck=0xF6F1EA
-				click, 407, 522 left, 1
-				sleep, 500
-				click, 1603, 862 left, 1
-				sleep, 300
-				gosub, checkDone
-				sleep,400
 			}
 			gosub, CheckSave
 			sleep, 300
@@ -1079,7 +1056,7 @@ Loop
 		sleep,300
 		gosub, checkDatimthay
 		sleep,300
-		click, 564, 502 left, 1 ;click picture
+		click, 564, 517 left, 1 ;click picture
 		sleep, 400
 		Loop
 		{
@@ -1311,7 +1288,7 @@ Loop
 		If (yPFound = "")
 		{
 		sleep,300
-		click, 564, 502 left, 1 ;click picture
+		click, 564, 515 left, 1 ;click picture
 		sleep, 400
 		Loop
 		{
@@ -1329,6 +1306,7 @@ Loop
 		;check map
 		Clipboard := ""
 		click, 1127, 86 left, 1
+		sleep, 100
 		If (Clipboard = "")
 		{
 			MsgBox, Map loi
@@ -1530,9 +1508,11 @@ NewUp:
 [Fresh] Quý: 		832000 - 824023
 [ICT] Ngọc Anh: 846592 - mã Fresh: 846589
 Fashion] Ngọc Anh: 1066341 - 1071644
-[Fashion] Bình Toon: 981365
+[Fashion] Bình Toon: 981365 - 990802
 [Fresh] Thùy Dương: 1040455 - 1037656
 */
+activebienthesp:= 824023
+activebienthett:= 990802
 Loop
 {
 	starttime:=starttime()
@@ -1604,7 +1584,7 @@ Loop
 			}
 			else
 			{
-				click 640, 624 left ,1
+				click 1180, 620 left ,1
 			}
 			Loop
 			{
@@ -1616,12 +1596,13 @@ Loop
 			}
 			sleep, 400
 			send, %varFolder%`n
-			sleep,100
+			sleep,400
 			send, {"}%varBarcode%_%A_Index%.jpg{"}
 			sleep,100
 			sendraw, `n
-			sleep, 500
+			sleep, 1000
 		}
+		sleep 700
 
 			; Click bookmark cm finish - Click Đồng ý
 		click, 575, 87 left, 1
@@ -1639,13 +1620,13 @@ Loop
 		{
 			if (upconfig = 1)
 			{
-				find(1037656)    ; Find biến thể 824023
+				find(activebienthesp)    ; Find biến thể 824023
 			}
 			if (upconfig = 2)
 			{
-				find(1071644)    ; Find biến thể 824023
+				find(activebienthett)    ; Find biến thể 824023
 			}
-			click, 564, 502 left, 1 ;click picture
+			click, 564, 515 left, 1 ;click picture
 			sleep, 400
 			CheckMau(1900,883,0xFFFFFF,200)
 			sleep, 500
@@ -1664,55 +1645,13 @@ Loop
 		; click gallery image
 		click, 252, 878 left, 2
 		; ảnh 1 -> click picture -> đổi identifier -> Save
-		Loop
-		{
-			PixelGetColor, pxcheck, 1916, 575
-		}
-		until pxcheck = 0x887E76
-		sleep, 400
-		click, 951, 544 left, 2
-		Loop
-		{
-			PixelGetColor, pxcheck, 1905, 575
-		}
-		until pxcheck = 0x53463C
-		sleep, 200
-		click, 739, 382 left, 3
-		sleep,100
-		send, %varID%_1
-		sleep, 400
-		click, 1244, 233 left, 1
-		sleep, 200
-		Loop
-		{
-			PixelGetColor, pxcheck, 1916, 575
-		}
-		until pxcheck = 0x887E76
-		sleep, 200
-		click, 791, 416 left, 3
-		sleep, 100
-		send, %varID%_1
-		sleep, 800
-		If (fdcount=1)
-		{
-			click, 1239, 266 left, 1
-			sleep, 200
-			click, 1264, 183 left, 1
-		}
-		;MsgBox, bllalblaa200
-		else
-		{
-
-			click, 1075, 269 left, 1
-			sleep, 400
-			click, 1107, 224 left, 1
-			sleep, 300
-			; Loop ảnh 2 -> fdcound -> đổi identifier -> Save
-			XAnh_All:=[260,290,320,350,380,410,440,470,500,530]
+			XAnh_All:=[230,260,290,320,350,380,410,440,470,500,530]
 			;MsgBox, %fdcount3%
 			for index, element in XAnh_All
 			{
-				sttanh:= index+1
+				checkmau(662, 636,0xFFFFFF)
+				sleep, 100
+				sttanh:= index
 				XAnh := element
 				If (sttanh > fdcount)
 				{
@@ -1721,36 +1660,55 @@ Loop
 				;MsgBox, %XAnh%
 				click, 1205, %XAnh% left,1
 				sleep, 200
-				click, 951, 544 left, 2
+				click, 937, 556 left, 2
 				Loop
 				{
-					PixelGetColor, pxcheck, 1905, 575
+					PixelGetColor, pxcheck, 666, 867
 				}
-				until pxcheck = 0x53463C
+				until pxcheck = 0xFFFFFF
 				sleep, 200
 				click, 739, 382 left, 3
 				sleep,100
 				send, %varID%_%sttanh%
-				sleep, 400
+				sleep, 300
+				; Đổi catalog -------------------
+				click, 1062, 390 left ,1
+				sleep, 300
+				click, 973, 393 left, 1
+				checkmau2(1018, 551, 0xFFFFFF)
+				sleep, 200
+				click, 967, 418 left, 1
+				sleep, 300
+				; tạm thời ---------------
 				click, 1244, 233 left, 1
 				sleep, 200
-				checkmau(1916,575,0x887E76)
-				click, 791, 416 left, 3
+				checkmau2(1281, 754,0xFFFFFF)
+				sleep, 100
+				click, 1106, 241 left, 1
+				sleep,200
+				click, 803, 394 left, 3
 				sleep, 100
 				send, %varID%_%sttanh%
 				sleep, 200
-				checkmau(1092, 269,maunutsave)
-				click, 1075, 269 left, 1
-				sleep, 400
-				click, 1107, 224 left, 1
+				; Đổi catalog -------------------
+				click, 1057, 396 left ,1
 				sleep, 300
+				click, 993, 396 left, 1
+				checkmau(1059, 451, 0xFFFFFF)
+				sleep, 200
+				click, 967, 418 left, 1
+				sleep, 300
+				; tạm thời ---------------
+				checkmau(1059, 254,maunutsave)
+				click, 1059, 254 left, 1
+				sleep, 400
 					;MsgBox, check
 			}
 			sleep, 300
-			click, 1264, 183 left, 1	
+			click, 1264, 193 left, 1	
 			sleep, 300	
 	
-		}
+		
 	}
 	CheckMau(1902,193,"0xFFFFFF")
 	endtime:=endtime()
@@ -2226,7 +2184,6 @@ GuiControl, 1:, Estimated,% "Còn lại: "timedisplay.hour ":" timedisplay.min "
 return
 
 manualConvertSP:
-f1::
 
 		Clipboard:=""
 		GuiControl, 1:, Current, %varCurrent%
@@ -2304,7 +2261,6 @@ f1::
 
 
 ManualMapSP:
-f2::
 		varCurrent = %varID%
 		Clipboard = ""
 		GuiControl, 1:, Current, %varCurrent%
@@ -2320,7 +2276,7 @@ f2::
 		sleep,300
 		gosub, checkDatimthay
 		sleep,300
-		click, 564, 502 left, 1 ;click picture
+		click, 564, 517 left, 1 ;click picture
 		sleep, 400
 		Loop
 		{
@@ -2412,13 +2368,14 @@ f2::
 			a:=ContainerCount()
 			sleep,100
 			b:=AutoMapMediaContainerSP()
-			If (a<>b and a<>fdcount)
+			If (a == b and a == fdcount)
 			{
-				MsgBox, Check lai
+				
+				click, 1611, 868 left, 1
 			}
 			else
 			{
-				click, 1611, 868 left, 1
+				MsgBox, Check lai`nContainerCount = %a%`nAutomapMediaContainerSP= %b%`n FolderCount = %fdcount%
 			}
 		}
 		sleep, 400
@@ -2429,3 +2386,7 @@ f2::
 		click, 1882, 658 left, 1 ; click save
 		sleep,200
 		return
+		
+/::
+AutoMapMediaContainerSP()
+return

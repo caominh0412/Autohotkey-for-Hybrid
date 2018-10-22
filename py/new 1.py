@@ -8,11 +8,11 @@ from getImage import getImage
 
 
 session = HTMLSession()
-urlcha = 'https://www.adayroi.com/TAN-HOANG-mc1552?page='
-filename = 'TAN HOANG.csv'
+urlcha = 'https://www.adayroi.com/banh-keo-c697?page='
+filename = 'banhkeo.csv'
 f = open(filename, "w", encoding="utf-8")
 f.write("")
-for i in range(0,8):
+for i in range(0,21):
 	my_url = urlcha + str(i)
 	print(my_url)
 	print('Page:' + str(i))
@@ -40,7 +40,7 @@ for i in range(0,8):
 		#item_price = item.div.div.span.text
 		print("   Name: " + item_name)
 		print('   Price:' + item_price)
-		print('   Link:' + item_link)
+		print('   Link: ' + item_link)
 		SKU = item_link[-len(item_link)+item_link.find('offer=')+6:]
 		print('   SKU: '+SKU)
 		#item = getImage(item_link)

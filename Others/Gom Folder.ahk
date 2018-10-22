@@ -20,7 +20,7 @@ count=1
 Loop, parse, A_GuiEvent, `n
 {
 SplitPath,A_LoopField, name,dir
-;MsgBox,  %name%`n%dir%
+MsgBox,  %name%`n%dir%
 SplitPath,dir,barcode
 StringLeft, NewFolder, name, 12
 FileCreateDir, %dir%\%Newfolder%
