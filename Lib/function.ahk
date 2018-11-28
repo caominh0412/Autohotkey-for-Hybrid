@@ -5,7 +5,7 @@ AutoMapMediaContainerSP()
 WinActivate, ahk_exe chrome.exe
 sleep, 300
 ContainerCount2:=0
-Loop,6
+Loop,7
 {
 	ImageSearch,,y%A_Index%,299, 511,663, 743,PNG\_%A_Index%.png
 	y%A_Index% := y%A_Index% +10
@@ -23,7 +23,7 @@ MouseMove, 1609, 862
 
 ContainerCount()
 {
-	Loop, 6
+	Loop, 7
 	{
 		ImageSearch,,yContainerCount%A_Index%,1576, 450 ,1633, 491, PNG\%A_Index%items.png
 		If (yContainerCount%A_Index% <> "")
@@ -54,19 +54,22 @@ ExcelCount()
 
 starttime()
 {
-	starttime:= A_Sec
+	starttime:= A_TickCount
 	return starttime
 }
 
 endtime()
 {
-	endtime := A_Sec
+	endtime := A_TickCount
 	return endtime
 }
 
-timecount(starttime,endtime,row,count,besttime:=100)
+timecount(starttime,endtime,row,count,besttime)
 {
+	if besttime := ""
+		besttime := 1000
 	lastrowtime:=endtime-starttime
+	lastrowtime:=floor(lastrowtime/1000)
 	if lastrowtime>0
 	{
 		estimatedmin:= lastrowtime*(count-row)/60
@@ -161,9 +164,9 @@ find(var)
 ;---------------------------------Check trang thai QC---------------------
 CheckQC()
 {
-		ImageSearch,,ysubmit,276, 645,490, 688 , PNG\submittoQC.png
-		ImageSearch,,yapprove,276, 645,490, 688 , PNG\Approve.png
-		ImageSearch,,yqcdone,276, 645,490, 688 , PNG\qcdone.png
+		ImageSearch,,ysubmit,215, 647,821, 688 , PNG\submittoQC.png
+		ImageSearch,,yapprove,215, 647,821, 688 , PNG\Approve.png
+		ImageSearch,,yqcdone,215, 647,821, 688, PNG\qcdone.png
 		if (ysubmit <> ""){
 			trangthai := "submit"
 		}
@@ -316,5 +319,30 @@ CheckMapanh()
 		sleep, 300
 		CheckDone()
 		click, 1885, 661 left, 1
+	}
+}
+
+clickretry(X,Y, ms := 50, A_retry := 4)
+{
+	Loop, %A_retry%
+	{
+		MouseMove, %x%, %y%
+		sleep, 50
+		PixelGetColor, before ,%x%, %y%
+		click , %X%, %Y% left, 1
+		MouseMove,  %x%+10, %y%+10
+		sleep, 20
+		PixelGetColor, after, %X% , %y%
+		;MsgBox, %before% - %after%
+		If before= after
+		{
+			MsgBox, %before% - %after%
+			click , %X%, %Y% left, 1
+		}
+		else
+		{
+			break
+		}
+		MouseMove, %x%+10, %y%+10
 	}
 }

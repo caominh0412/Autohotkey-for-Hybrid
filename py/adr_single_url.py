@@ -2,12 +2,28 @@ from getImage import getImage,getlink,getPrice,gettotalpage,makemydir
 from multiprocessing import Pool
 import urllib.request
 
-urls = ['https://www.adayroi.com/bong-trang-diem-silcot-premium-66-mieng-p-PRI987726',
-'https://www.adayroi.com/bong-tay-trang-mieng-doi-silcot-40-mieng-p-PRI944781'
+
+urls = [
+"http://adayroi.com/p/1348413",
+"http://adayroi.com/p/1929023",
+"http://adayroi.com/p/1929026",
+"http://adayroi.com/p/1929027",
+"http://adayroi.com/p/1929028",
+"http://adayroi.com/p/1929029",
+"http://adayroi.com/p/1929030",
+"http://adayroi.com/p/1929031",
+"http://adayroi.com/p/1929032",
+"http://adayroi.com/p/1929033",
+"http://adayroi.com/p/1929034",
+"http://adayroi.com/p/1929035",
+"http://adayroi.com/p/1929036",
 ]
 
+global filename
+global downloadfolder
+global folder
 filename = 'image.csv'
-downloadfolder = 'silcot'
+downloadfolder = 'thuyttt_8'
 folder = 'C:/Users/minhcq/Desktop/download/'+downloadfolder
 
 if __name__ == '__main__':
@@ -15,7 +31,6 @@ if __name__ == '__main__':
     outputs = pool.map(getImage,urls)
     pool.close()
     pool.join()
-    pool.close()
     f = open(filename, "w", encoding="utf-8")
     f.write("")
     for item in outputs:

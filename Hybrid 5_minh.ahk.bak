@@ -61,7 +61,7 @@ Gui 1: Add, Button, x2 y39 w90 h30 vBarcode gBarcode, %Barcode%
 Gui 1: Add, Text, x2 y69 w90 h30 +Center vGSoAnh, Số ảnh: %fdcount%
 
 Gui 1: Add, GroupBox, x2 y129 w180 h120 , Auto
-Gui 1: Add, Button, x12 y209 w160 h30 gUp, Up ảnh +map - Product Media
+Gui 1: Add, Button, x12 y209 w160 h30 gDuyet, Duyệt
 Gui 1: Add, Button, x12 y149 w160 h30 gNewUpChon, Up ảnh mới
 Gui 1: Add, Button, x12 y179 w160 h30 gMapContainSP, Map Container vào Sản phẩm
 
@@ -76,7 +76,7 @@ Gui 1: Add, Text, x92 y439 w90 h20 vCurrent, %varCurrent%
 Gui 1: Add, Progress, x12 y459 w170 h10 vProgressBar, 0
 
 Gui 1: Add, Text, x12 y469 w170 h20 vEstimated, Còn lại:
-Gui 1: Add, Text, x12 y489 w170 h20 , Thời gian 1 dòng:
+Gui 1: Add, Text, x12 y489 w170 h20 vEstimated2, Thời gian 1 dòng:
 Gui 1: Add, Button, x12 y549 w80 h30 gReset, Reset
 Gui 1: Add, Button, x12 y519 w80 h30 gDoiten, Đổi tên
 
@@ -117,7 +117,7 @@ Gui 5: Add, Button, x210 y10 w100 h30  gThayten, Thay tên
 Gui 5: Add, Button, x310 y10 w100 h30  gCheckthuoctinh, Check thuộc tính
 Gui 5: Add, Button, x410 y10 w100 h30  gNewUp, Up ảnh mới
 Gui 5: Add, Button, x510 y10 w100 h30  gDoibrand, Doi Brand
-Gui 5: Add, Button, x610 y10 w100 h30  gSaithuoctinh, Sai thuoc tinh
+Gui 5: Add, Button, x610 y10 w100 h30  gSuacatalog, suacatalog
 
 Gui 7: Add, text, w300 vEstimated2, Còn lại:
 ;Gui 7: Add, Button, w70 h30 ys gGui7Close, Close
@@ -1005,9 +1005,10 @@ Gui 4: Submit
 GuiControl,1:,AppStatus, Label %A_ThisLabel%
 WinMove, Hybrid 3.0,, -60
 Winset, Trans, 199, Hybrid 3.0
+gosub, count
 Loop
 {
-	gosub, starttime
+	starttime:=starttime()
 	gosub, excel
 	If (varID = "")
 	{
@@ -1020,7 +1021,8 @@ Loop
 		gosub, checkSaveDone
 		gosub, CheckDone
 	}
-	gosub,endtime
+	endtime:=endtime()
+	gosub, Conlaitime
 	Row++
 }
 until (varBarcode="")
@@ -1028,12 +1030,13 @@ return
 
 MapBienThe:
 Gui 4: Submit
+gosub, count
 GuiControl,1:,AppStatus, Label %A_ThisLabel%
 WinMove, Hybrid 3.0,, -60
 Winset, Trans, 199, Hybrid 3.0
 Loop
 {
-	gosub, starttime
+	starttime := starttime()
 	gosub, excel
 	If (varID = "")
 	{
@@ -1182,7 +1185,8 @@ Loop
 			click, 436, 663 left, 1
 		}
 	}
-	gosub, endtime
+	endtime:=endtime()
+	gosub, Conlaitime
 	Row++
 }
 until (varBarcode="")
@@ -1277,51 +1281,44 @@ Loop
 		WinActivate, ahk_exe chrome.exe
 		sleep, 200
 		gosub,CheckDone
-		gosub, FindID
-		sleep,300
-		gosub, Checkloading
-		sleep,300
-		gosub, CheckDone
-		sleep,300
-		gosub, checkDatimthay
+		find(varCurrent)
 		ImageSearch,,yPFound, 1869, 412,1923, 449, PNG\0items.png
-		If (yPFound = "")
-		{
-		sleep,300
-		click, 564, 515 left, 1 ;click picture
-		sleep, 400
-		Loop
-		{
-			PixelGetColor, pxcheck, 1900, 883
-			timeout++
-			If (timeout = 40)
-			{
-				return
-			}
-		}
-		until pxcheck = 0xFFFFFF ;check đã click sp
 		sleep,400
 		click, 752, 712 left, 1
 		sleep, 400
 		;check map
-		Clipboard := ""
-		click, 1127, 86 left, 1
-		sleep, 100
-		If (Clipboard = "")
+		ImageSearch, Xcheckmap,,218, 750 ,1061, 977, PNG\chuamap.png
+		if (Xcheckmap != "")
 		{
 			MsgBox, Map loi
 		}
 		qcstate := CheckQC()
 		if (qcstate <> "qcdone")
 		{
+			;MsgBox, %qcstate%
 			click, 356, 661 left, 1 ; click submit to  qc
 			sleep,300
 			click, 436, 663 left, 1
+			MouseMove, 0,0
+			sleep, 200
+			If (checkqc() <> "qcdone")
+			{
+				;MsgBox, % CheckQC()
+				click, 356, 661 left, 1 ; click submit to  qc
+				sleep,300
+				click, 436, 663 left, 1
+				MouseMove, 0,0
+				sleep, 200
+				If (checkqc() <> "qcdone")
+				{
+					MsgBox, Loi
+				}
+			}
 		}
 		;gosub, checkSaveDone
 		;gosub, CheckDone
 	}
-	}
+	
 
 	Row++
 }
@@ -1508,11 +1505,12 @@ NewUp:
 [Fresh] Quý: 		832000 - 824023
 [ICT] Ngọc Anh: 846592 - mã Fresh: 846589
 Fashion] Ngọc Anh: 1066341 - 1071644
-[Fashion] Bình Toon: 981365
+[Fashion] Bình Toon: 981365 - 990802
 [Fresh] Thùy Dương: 1040455 - 1037656
 */
-activebienthesp:= 824023
+activebienthesp:= 1870068
 activebienthett:= 1071644
+gosub, count
 Loop
 {
 	starttime:=starttime()
@@ -1552,20 +1550,18 @@ Loop
 		sleep,400
 		; Click bookmark 2 MC
 		click,501, 88 left, 1
-		sleep, 700
+		sleep, 400
 		; Click end -> Cuối trang
-		send, {END}
-		sleep, 200
 		Loop
 		{
 			PixelGetColor, pxcheck, 1084, 1037
 		}
 		until pxcheck = 0xF1EFEC
-		sleep, 500
+		sleep, 300
 		; Xoas anh da co
 		Loop
 		{
-			PixelSearch, Px, Py, 500, 644, 1866, 838, 0x2c1beb ,3, fast
+			PixelSearch, Px, Py, 621, 584, 1255, 606, 0x2c1beb ,3, fast
 			Px := Px + 5
 			Py := Py + 5
 			click, %Px%, %Py%, left, 1
@@ -1578,14 +1574,7 @@ Loop
 		; Up ảnh vào màu đen - đỏ - ID Biến thể 824023
 		Loop ,%fdcount%
 		{
-			If (A_Index = 1)
-			{
-				click 695, 812 left ,1
-			}
-			else
-			{
-				click 1180, 620 left ,1
-			}
+			click 932, 500 left ,1
 			Loop
 			{
 				WinGetActiveTitle,Titlecheck
@@ -1671,41 +1660,25 @@ Loop
 				sleep,100
 				send, %varID%_%sttanh%
 				sleep, 300
-				; Đổi catalog -------------------
-				click, 1062, 390 left ,1
-				sleep, 300
-				click, 973, 393 left, 1
-				checkmau2(1018, 551, 0xFFFFFF)
+				click, 1228, 247 left, 1
 				sleep, 200
-				click, 967, 418 left, 1
+				checkmau(940, 779,0xF1EDEA)
 				sleep, 300
-				; tạm thời ---------------
-				click, 1244, 233 left, 1
+				clickretry(1106, 241)
 				sleep, 200
-				checkmau2(1281, 754,0xFFFFFF)
-				sleep, 100
-				click, 1106, 241 left, 1
+				checkmau(1108, 231,0xF1EDEA)
 				sleep,200
 				click, 803, 394 left, 3
 				sleep, 100
 				send, %varID%_%sttanh%
 				sleep, 200
-				; Đổi catalog -------------------
-				click, 1057, 396 left ,1
-				sleep, 300
-				click, 993, 396 left, 1
-				checkmau(1059, 451, 0xFFFFFF)
-				sleep, 200
-				click, 967, 418 left, 1
-				sleep, 300
-				; tạm thời ---------------
-				checkmau(1059, 254,maunutsave)
-				click, 1059, 254 left, 1
+				checkmau2(1059, 254,0xE3DAD2)
+				clickretry(1059, 248)
 				sleep, 400
 					;MsgBox, check
 			}
 			sleep, 300
-			click, 1264, 193 left, 1	
+			clickretry( 1264, 193)	
 			sleep, 300	
 	
 		
@@ -2051,7 +2024,6 @@ WinMove, Hybrid 3.0,, -60
 Winset, Trans, 199, Hybrid 3.0
 Loop
 {
-	gosub, starttime
 	gosub, excel
 	If (varID = "")
 	{
@@ -2059,7 +2031,35 @@ Loop
 	}
 	If (fdcount > 0)
 	{
-		baocao.range("AA" . Row ).value := fdcount
+		baocao.range("A" . Row ).value := fdcount
+		if (fdcount < 3)
+		{	
+			MsgBox, 4145, Warning, Dòng %row% ít hơn 3 ảnh
+			IfMsgBox, OK
+			{
+				return
+			}
+			IfMsgBox, Cancel
+			{
+				Run, %varFolder%
+				return
+			}
+		}	
+		Loop, %varFolder%\*.jpg
+		{
+			If ( A_LoopFileSizeKB > 450 )
+			{
+				MsgBox, 4402, File size warning!, %A_Loopfilename% quá dung lượng 500kb
+				IfMsgBox, Abort
+					break
+				IfMsgBox, Ignore
+				{
+					return
+				}
+				IfMsgBox, Retry
+					Run, %varFolder%
+			}
+		}
 	}
 	else
 	{
@@ -2068,6 +2068,8 @@ Loop
 	Row++
 }
 until (varID = "")
+row:=2
+gosub, excel
 return
 ;------------------------------------------------------------------------------------------------------Funtion-----------------------------------------------------------------------
 
@@ -2104,16 +2106,12 @@ loop, %varFolder%\%varBarcode%_*.jpg
 {
 	fdcount ++
 }
-loop, %varFolder%\%varBarcode%_*.jpeg
-{
-	fdcount ++
-}
 varAnh = %varFolder%\%varBarcode%_1.jpg
 GuiControl, 1:, ID, %varID%
 GuiControl, 1:, Bienthe, %varBienthe%
 GuiControl, 1:, Barcode , %varBarcode%
 GuiControl, 1:, GSoAnh, Số ảnh: %fdcount%
-GuiControl, 1:, GuiRow , Dòng số: %Row%
+GuiControl, 1:, GuiRow , Dòng số: %Row%/%Count%
 GuiControl, 1:, Anh, %varAnh%
 return
 
@@ -2122,16 +2120,19 @@ return
 
 Count:
 GuiControl,1:,AppStatus, Label %A_ThisLabel%
+Currentrow:= row
 Row:=2
 count:=0
 Loop
 {
 	varID := baocao.range("C" . Row ).value
+	varbienthe := baocao.range("D" . Row ).value
 	row++
 	count++
 }
-until (varID="")
+until (varID="" and varbienthe = "")
 MsgBox, Count :%count%
+row:=Currentrow
 return
 
 starttime:
@@ -2179,7 +2180,8 @@ If (endtime > starttime){
 ;MsgBox, % starttime "-" endtime "-" row "-" count "-" besttime
 timedisplay:= timecount(starttime,endtime,row,count,besttime)
 ;MsgBox, % timedisplay.hour
-GuiControl, 1:, Estimated,% "Còn lại: "timedisplay.hour ":" timedisplay.min ":" timedisplay.sec "- Last time :" timedisplay.lastrowtime " Best time: " besttime
+GuiControl, 1:, Estimated,% "Còn lại: "timedisplay.hour ":" timedisplay.min ":" timedisplay.sec 
+GuiControl, 1:, Estimated2,% "Last time :" timedisplay.lastrowtime " Best time: " timedisplay.besttime
 }
 return
 
@@ -2310,9 +2312,10 @@ ManualMapSP:
 			GuiControl, 1:, GuiPxcheck,  %pxcheck%
 		}
 		until pxcheck = 0xFFFFFF ;check da hien bảng chọn ?
-		click, 648, 521 left, 1
+		sleep, 100
+		clickretry( 648, 521 )
 		sleep, 300
-		click, 1611, 868 left, 1
+		clickretry( 1611, 868)
 		sleep, 400
 		gosub, checkDone
 		sleep, 300
@@ -2389,4 +2392,62 @@ ManualMapSP:
 		
 /::
 AutoMapMediaContainerSP()
+return
+
+suacatalog:
+Loop
+{
+	gosub, starttime
+	gosub, excel
+	If (varID = "")
+	{
+		MsgBox, Không còn gì để tạo đâu
+		return
+	}
+	else
+	{
+		varCurrent = %varID%
+		GuiControl, 1:, Current, %varCurrent%
+		gosub, Progress1
+		WinActivate, ahk_exe chrome.exe
+		sleep, 200
+		find(varID)
+		click, 564, 515 left, 1 ;click picture
+		sleep, 400
+		CheckMau(1900,883,0xFFFFFF,200)
+		sleep, 200
+		click, 1843, 800 left, 1
+		sleep, 400
+		click, 1446, 801 left, 1
+		checkmau2(1503, 964,0xFFFFFF)
+		click, 1519, 827 left ,1
+		sleep, 200
+		click , 1252, 953 left , 2
+		sleep, 200
+		checkmau(1263, 445,0xFFFFFF)
+		sleep,200
+		click, 1062, 390 left ,1
+		sleep, 300
+		click, 973, 393 left, 1
+		checkmau2(1018, 551, 0xFFFFFF)
+		sleep, 200
+		click, 967, 418 left, 1
+		sleep, 300
+		click, 1241, 245 left, 1
+		checkmau(1900,883,0xFFFFFF)
+		sleep, 200
+		click, 1904, 156 left, 1
+		sleep, 200
+		
+		; tạm thời ---------------
+		click, 1244, 233 left, 1
+		sleep, 200
+		gosub, CheckSave
+		click, 1869, 665 left, 1
+		gosub, Checksavedone
+		gosub,endtime
+	}
+	Row++
+}
+until (varID = "")
 return
