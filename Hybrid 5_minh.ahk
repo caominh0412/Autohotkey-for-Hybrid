@@ -1659,8 +1659,8 @@ Loop
 				click, 739, 382 left, 3
 				sleep,100
 				send, %varID%_%sttanh%
-				sleep, 300
-				click, 1228, 247 left, 1
+				sleep, 400
+				clickretry(1228, 247)
 				sleep, 200
 				checkmau(940, 779,0xF1EDEA)
 				sleep, 300
@@ -2022,52 +2022,48 @@ Checkfolder:
 GuiControl,1:,AppStatus, Label %A_ThisLabel%
 WinMove, Hybrid 3.0,, -60
 Winset, Trans, 199, Hybrid 3.0
+file500kb := 0
+gosub, excel
 Loop
 {
-	gosub, excel
-	If (varID = "")
-	{
-		return
-	}
-	If (fdcount > 0)
-	{
-		baocao.range("A" . Row ).value := fdcount
-		if (fdcount < 3)
+	if (fdcount < 3)
 		{	
 			MsgBox, 4145, Warning, Dòng %row% ít hơn 3 ảnh
 			IfMsgBox, OK
 			{
-				return
+				row++
+				continue
 			}
 			IfMsgBox, Cancel
 			{
 				Run, %varFolder%
 				return
 			}
-		}	
+		}
+	If (fdcount > 0)
+	{
+		baocao.range("A" . Row ).value := fdcount
 		Loop, %varFolder%\*.jpg
 		{
 			If ( A_LoopFileSizeKB > 450 )
 			{
-				MsgBox, 4402, File size warning!, %A_Loopfilename% quá dung lượng 500kb
-				IfMsgBox, Abort
-					break
-				IfMsgBox, Ignore
-				{
-					return
-				}
-				IfMsgBox, Retry
-					Run, %varFolder%
+				file500kb ++
 			}
 		}
 	}
+
 	else
 	{
 		MsgBox, Dong %row% chua co anh
 	}
 	Row++
+	gosub, excel
 }
 until (varID = "")
+If ( file500kb > 0 )
+{
+	MsgBox, Còn file lớn hơn 450kb
+}
 row:=2
 gosub, excel
 return
@@ -2102,6 +2098,14 @@ Loop, 6
 varFolder = %folderloc%\%varBarcode%
 fdcount :=0
 ;Dem Anh
+Loop, %varFolder%\*.png
+	{
+		StringReplace, jpgname, A_Loopfilename, png, jpg
+		IfNotExist, %varFolder%\%jpgname%
+		{
+			RunWait, topng.exe `"%A_LoopFileFullPath%`" jpg
+		}
+	}
 loop, %varFolder%\%varBarcode%_*.jpg
 {
 	fdcount ++
@@ -2131,7 +2135,7 @@ Loop
 	count++
 }
 until (varID="" and varbienthe = "")
-MsgBox, Count :%count%
+;MsgBox, Count :%count%
 row:=Currentrow
 return
 

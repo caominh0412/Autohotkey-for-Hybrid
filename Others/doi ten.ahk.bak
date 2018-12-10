@@ -1,5 +1,5 @@
 Counter := 1
-Gui 1: Add, Text, w50 h200 vText , %Counter%
+Gui 1: Add, Text, w50 h 200 vText , %Counter%
 Gui 1: Add, Button, w100 ys gReset, Reset
 Gui 1: Add, Button, w100 ys gNext, Next
 Gui 1: Add, Button, w100 ys gFolder, Folder

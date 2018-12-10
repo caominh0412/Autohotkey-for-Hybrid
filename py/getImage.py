@@ -14,8 +14,9 @@ def getImage(item_link):
     session = HTMLSession()
     item_session = session.get(item_link)
     item_session.html.render(timeout=20,sleep=3,wait=2)
-    SKU = item_session.html.find('.panel-serial-number')[0].text
-    SKU = SKU[8:SKU.find(' - ')]
+    item_SKU = item_session.html.find('.panel-serial-number')[0].text
+    SKU = item_SKU[8:item_SKU.find(' - ')]
+    barcode = item_SKU[item_SKU.find('Mã SKU: ')+8:]
     item['SKU'] = SKU
     images = item_session.html.find('.theatre-image__list-item')
     i = 0
@@ -38,8 +39,8 @@ def getImage(item_link):
     for i in range(0,len(item)-1):
         try:
             #print('SKU: '+ SKU)
-            makemydir(folder+'/'+SKU)
-            imgdownload = folder+'/'+SKU+'/'+item['image'+str(i)].split('/')[-1]
+            makemydir(folder+'/'+barcode)
+            imgdownload = folder+'/'+barcode+'/'+item['image'+str(i)].split('/')[-1]
             print('SKU: '+ SKU +'------ Image: '+item['image'+str(i)] + '------ Downloading: '+ imgdownload)
             urllib.request.urlretrieve(item['image'+str(i)],imgdownload)           
         except:
@@ -49,6 +50,7 @@ def getImage(item_link):
     return item
 
 def getPrice(item_link):
+    session = HTMLSession()
     item = dict()
     item_session = session.get(item_link)
     item_session.html.render()
@@ -70,22 +72,24 @@ def makemydir(whatever):
 
 
 def gettotalpage(url):
+    session = HTMLSession()
     url_session = session.get(url)
     totalpage = url_session.html.find('a[aria-label="Next"]')[0].attrs['href']
-    totalpage = int(totalpage[-len(totalpage)+totalpage.find('=')+1:])+1
+    totalpage = int(totalpage[-len(totalpage)+totalpage.find('page=')+5:])+1
     print('Total page= ' + str(totalpage))
     return totalpage
 
 def getlink(url):
+    session = HTMLSession()
     links = []
     url_session = session.get(url)
     items = url_session.html.find('.product-item__container')
     for item in items:
         item_name = item.find('.product-item__info-title')[0].text
         item_link = 'https://adayroi.com'+item.find('.product-item__info-title')[0].attrs['href']
-        item_price = item.find('.product-item__info-price-original')[0].text
+        #item_price = item.find('.product-item__info-price-original')[0].text
         print(item_name)
-        print(item_price)
+        #print(item_price)
         links.append(item_link)
     return links
     

@@ -4,26 +4,14 @@ import urllib.request
 
 
 urls = [
-"http://adayroi.com/p/1348413",
-"http://adayroi.com/p/1929023",
-"http://adayroi.com/p/1929026",
-"http://adayroi.com/p/1929027",
-"http://adayroi.com/p/1929028",
-"http://adayroi.com/p/1929029",
-"http://adayroi.com/p/1929030",
-"http://adayroi.com/p/1929031",
-"http://adayroi.com/p/1929032",
-"http://adayroi.com/p/1929033",
-"http://adayroi.com/p/1929034",
-"http://adayroi.com/p/1929035",
-"http://adayroi.com/p/1929036",
+'https://www.adayroi.com/den-tha-tran-hinh-lap-phuong-megaboss-16-x-16-cm-p-PRI1149097?offer=PRI1149097_OKS'
 ]
 
 global filename
 global downloadfolder
 global folder
 filename = 'image.csv'
-downloadfolder = 'thuyttt_8'
+downloadfolder = 'xuan_gap'
 folder = 'C:/Users/minhcq/Desktop/download/'+downloadfolder
 
 if __name__ == '__main__':

@@ -327,7 +327,7 @@ clickretry(X,Y, ms := 50, A_retry := 4)
 	Loop, %A_retry%
 	{
 		MouseMove, %x%, %y%
-		sleep, 50
+		sleep, %ms%
 		PixelGetColor, before ,%x%, %y%
 		click , %X%, %Y% left, 1
 		MouseMove,  %x%+10, %y%+10
