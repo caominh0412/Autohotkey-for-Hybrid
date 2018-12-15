@@ -2023,9 +2023,9 @@ GuiControl,1:,AppStatus, Label %A_ThisLabel%
 WinMove, Hybrid 3.0,, -60
 Winset, Trans, 199, Hybrid 3.0
 file500kb := 0
+gosub, excel
 Loop
 {
-	gosub, excel
 	if (fdcount < 3)
 		{	
 			MsgBox, 4145, Warning, Dòng %row% ít hơn 3 ảnh
@@ -2048,6 +2048,11 @@ Loop
 			If ( A_LoopFileSizeKB > 450 )
 			{
 				file500kb ++
+				FileCopy, %A_LoopFilefullpath%, %A_temp%\%A_loopfilename%
+				;MsgBox, %A_temp%\%A_loopfilename%
+				Run, topng.exe `"%A_temp%\%A_LoopFileName%`" jpg
+				namenoext := StrSplit(A_loopfilename,".")[1]
+				FIleCopy, %A_temp%\%namenoext%.jpg,%A_LoopFiledir%,1
 			}
 		}
 	}
@@ -2057,11 +2062,13 @@ Loop
 		MsgBox, Dong %row% chua co anh
 	}
 	Row++
+	gosub, excel
 }
 until (varID = "")
 If ( file500kb > 0 )
 {
 	MsgBox, Còn file lớn hơn 450kb
+	
 }
 row:=2
 gosub, excel
@@ -2102,7 +2109,11 @@ Loop, %varFolder%\*.png
 		StringReplace, jpgname, A_Loopfilename, png, jpg
 		IfNotExist, %varFolder%\%jpgname%
 		{
-			RunWait, topng.exe `"%A_LoopFileFullPath%`" jpg
+				FileCopy, %A_LoopFilefullpath%, %A_temp%\%A_loopfilename%
+				;MsgBox, %A_temp%\%A_loopfilename%
+				Run, topng.exe `"%A_temp%\%A_LoopFileName%`" jpg
+				namenoext := StrSplit(A_loopfilename,".")[1]
+				FIleCopy, %A_temp%\%namenoext%.jpg,%A_LoopFileDir%,1
 		}
 	}
 loop, %varFolder%\%varBarcode%_*.jpg

@@ -2048,6 +2048,11 @@ Loop
 			If ( A_LoopFileSizeKB > 450 )
 			{
 				file500kb ++
+				FileCopy, %A_LoopFilefullpath%, %A_temp%\%A_loopfilename%
+				;MsgBox, %A_temp%\%A_loopfilename%
+				Run, topng.exe `"%A_temp%\%A_LoopFileName%`" jpg
+				namenoext := StrSplit(A_loopfilename,".")[1]
+				FIleCopy, %A_temp%\%namenoext%.jpg,%A_LoopFiledir%,1
 			}
 		}
 	}
@@ -2063,6 +2068,7 @@ until (varID = "")
 If ( file500kb > 0 )
 {
 	MsgBox, Còn file lớn hơn 450kb
+	
 }
 row:=2
 gosub, excel
@@ -2103,7 +2109,11 @@ Loop, %varFolder%\*.png
 		StringReplace, jpgname, A_Loopfilename, png, jpg
 		IfNotExist, %varFolder%\%jpgname%
 		{
-			RunWait, topng.exe `"%A_LoopFileFullPath%`" jpg
+				FileCopy, %A_LoopFilefullpath%, %A_temp%\%A_loopfilename%
+				;MsgBox, %A_temp%\%A_loopfilename%
+				Run, topng.exe `"%A_temp%\%A_LoopFileName%`" jpg
+				namenoext := StrSplit(A_loopfilename,".")[1]
+				FIleCopy, %A_temp%\%namenoext%.jpg,%A_LoopFileDir%,1
 		}
 	}
 loop, %varFolder%\%varBarcode%_*.jpg

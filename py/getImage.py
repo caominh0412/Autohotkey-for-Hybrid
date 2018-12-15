@@ -4,11 +4,6 @@ import urllib.request
 import os
 
 
-filename = 'image.csv'
-downloadfolder = 'tinhdaugold'
-folder = 'C:/Users/minhcq/Desktop/download/'+downloadfolder
-
-
 def getImage(item_link):
     item = dict()
     session = HTMLSession()
@@ -95,57 +90,18 @@ def getlink(url):
     
 
 
-urls = [
-'https://www.adayroi.com/p/1845461',
-'https://www.adayroi.com/p/1852029',
-'https://www.adayroi.com/p/1845461',
-'https://www.adayroi.com/p/1852020',
-'https://www.adayroi.com/p/1845461',
-'https://www.adayroi.com/p/1852025',
-'https://www.adayroi.com/p/1845462',
-'https://www.adayroi.com/p/1852029',
-'https://www.adayroi.com/p/1845462',
-'https://www.adayroi.com/p/1852020',
-'https://www.adayroi.com/p/1845462',
-'https://www.adayroi.com/p/1852025',
-'https://www.adayroi.com/p/1862000',
-'https://www.adayroi.com/p/1845788',
-'https://www.adayroi.com/p/1862000',
-'https://www.adayroi.com/p/1845800',
-'https://www.adayroi.com/p/1862000',
-'https://www.adayroi.com/p/1845831',
-'https://www.adayroi.com/p/1845306',
-'https://www.adayroi.com/p/1845305',
-'https://www.adayroi.com/p/1845310',
-'https://www.adayroi.com/p/PRI1257854',
-'https://www.adayroi.com/p/1845306',
-'https://www.adayroi.com/p/PRI1257854',
-'https://www.adayroi.com/p/1845305',
-'https://www.adayroi.com/p/PRI1257892',
-'https://www.adayroi.com/p/1845306',
-'https://www.adayroi.com/p/PRI1257892',
-'https://www.adayroi.com/p/1845305',
-'https://www.adayroi.com/p/PRI1257892',
-'https://www.adayroi.com/p/PRI1262681',
-'https://www.adayroi.com/p/PRI1257854',
-'https://www.adayroi.com/p/PRI1262681',
-'https://www.adayroi.com/p/PRI1265167',
-'https://www.adayroi.com/p/PRI1264782',
-'https://www.adayroi.com/p/PRI1264906',
-'https://www.adayroi.com/p/PRI1265491',
-'https://www.adayroi.com/p/PRI1264906',
-'https://www.adayroi.com/p/PRI1264702',
-'https://www.adayroi.com/p/PRI1264906',
-'https://www.adayroi.com/p/PRI1264908',
-'https://www.adayroi.com/p/PRI1264945',
-'https://www.adayroi.com/p/PRI1265491',
-'https://www.adayroi.com/p/PRI1264945',
-'https://www.adayroi.com/p/PRI1264702',
-'https://www.adayroi.com/p/PRI1264945',
-'https://www.adayroi.com/p/PRI1264908',
+urls = ['https://www.adayroi.com/khan-giay-napkin-elene-100-to-p-PRI46601',
+'https://www.adayroi.com/giay-ve-sinh-elene-hong-3-lop-10-cuon-p-1820186?offer=1820186_LZZ&search=elene',
+'https://www.adayroi.com/khan-giay-rut-da-nang-2-lop-silkwell-100-to-p-PRI1059973?offer=PRI1059973_CHK&search=silkwell',
+
 
 ]
 
+
+
+filename = 'image.csv'
+downloadfolder = 'tinhdaugold'
+folder = 'C:/Users/minhcq/Desktop/download/'+downloadfolder
 
 
 if __name__ == '__main__':
