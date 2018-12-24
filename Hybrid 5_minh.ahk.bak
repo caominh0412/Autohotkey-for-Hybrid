@@ -2050,9 +2050,11 @@ Loop
 				file500kb ++
 				FileCopy, %A_LoopFilefullpath%, %A_temp%\%A_loopfilename%
 				;MsgBox, %A_temp%\%A_loopfilename%
-				Run, topng.exe `"%A_temp%\%A_LoopFileName%`" jpg
+				RunWait, topng.exe `"%A_temp%\%A_LoopFileName%`" jpg
 				namenoext := StrSplit(A_loopfilename,".")[1]
 				FIleCopy, %A_temp%\%namenoext%.jpg,%A_LoopFiledir%,1
+				FileDelete,%A_temp%\%namenoext%.jpg
+				FileDelete,%A_temp%\%A_loopfilename%
 			}
 		}
 	}
@@ -2107,15 +2109,37 @@ fdcount :=0
 Loop, %varFolder%\*.png
 	{
 		StringReplace, jpgname, A_Loopfilename, png, jpg
-		IfNotExist, %varFolder%\%jpgname%
+		IfInString, A_Loopfilename, renamed
+			continue
+		IfNotExist, %varFolder%\%jpgname%.jpg
 		{
 				FileCopy, %A_LoopFilefullpath%, %A_temp%\%A_loopfilename%
 				;MsgBox, %A_temp%\%A_loopfilename%
 				Run, topng.exe `"%A_temp%\%A_LoopFileName%`" jpg
 				namenoext := StrSplit(A_loopfilename,".")[1]
 				FIleCopy, %A_temp%\%namenoext%.jpg,%A_LoopFileDir%,1
+				FileMove, %A_LoopFilefullpath%, %A_Loopfiledir%\%namenoext%_renamed.png
+				FileDelete,%A_temp%\%namenoext%.jpg
+				FileDelete,%A_temp%\%A_loopfilename%
 		}
 	}
+Loop, %varFolder%\*.jpeg
+	{
+		StringReplace, jpgname, A_Loopfilename, jpeg, jpg
+		IfInString, A_Loopfilename, renamed
+			continue
+		IfNotExist, %varFolder%\%jpgname%.jpg
+		{
+				FileCopy, %A_LoopFilefullpath%, %A_temp%\%A_loopfilename%
+				;MsgBox, %A_temp%\%A_loopfilename%
+				RunWait, topng.exe `"%A_temp%\%A_LoopFileName%`" jpg
+				namenoext := StrSplit(A_loopfilename,".")[1]
+				FIleCopy, %A_temp%\%namenoext%.jpg,%A_LoopFileDir%,1
+				FileMove, %A_LoopFilefullpath%, %A_Loopfiledir%\%namenoext%_renamed.jpeg
+				FileDelete,%A_temp%\%namenoext%.jpg
+				FileDelete,%A_temp%\%A_loopfilename%				
+		}
+	}	
 loop, %varFolder%\%varBarcode%_*.jpg
 {
 	fdcount ++

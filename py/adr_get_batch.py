@@ -3,9 +3,7 @@ from multiprocessing import Pool
 import urllib.request
 
 filename = 'thienanh.csv'
-downloadfolder = 'adr'
-folder = 'C:/Users/minhcq/Desktop/download/'+downloadfolder
-url =  'https://www.adayroi.com/THIEN-ANH-mc2137'
+url =  'https://www.adayroi.com/TIN-VIET-mc245007'
 f = open(filename, "w", encoding="utf-8")
 f.write("")
 if __name__ == '__main__':

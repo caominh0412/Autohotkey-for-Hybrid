@@ -4,6 +4,16 @@ import urllib.request
 import os
 
 
+urls = ['https://www.adayroi.com/nuoc-hoa-nam-bvlgari-aqva-pour-homme-atlantiqve-eau-de-toilette-100ml-p-PRI1136271?offer=PRI1136271_P53',
+'https://www.adayroi.com/nuoc-hoa-nu-bvlgari-omnia-pink-sapphire-eau-de-toilette-40ml-p-921494?offer=921494_P53'
+]
+
+
+
+filename = 'tinviet.csv'
+downloadfolder = 'tinviet'
+folder = 'C:/Users/minhcq/Desktop/download/'+downloadfolder
+
 def getImage(item_link):
     item = dict()
     session = HTMLSession()
@@ -11,7 +21,7 @@ def getImage(item_link):
     item_session.html.render(timeout=20,sleep=3,wait=2)
     item_SKU = item_session.html.find('.panel-serial-number')[0].text
     SKU = item_SKU[8:item_SKU.find(' - ')]
-    barcode = item_SKU[item_SKU.find('Mã SKU: ')+8:]
+    barcode = item_SKU[item_SKU.find('Mã SKU: ')+8:item_SKU.find(')')-1]
     item['SKU'] = SKU
     images = item_session.html.find('.theatre-image__list-item')
     i = 0
@@ -35,7 +45,8 @@ def getImage(item_link):
         try:
             #print('SKU: '+ SKU)
             makemydir(folder+'/'+barcode)
-            imgdownload = folder+'/'+barcode+'/'+item['image'+str(i)].split('/')[-1]
+            #imgdownload = folder+'/'+SKU+'/'+item['image'+str(i)].split('/')[-1]
+            imgdownload = folder+'/'+barcode+'/'+SKU+'_'+str(i+1)+'.jpg'
             print('SKU: '+ SKU +'------ Image: '+item['image'+str(i)] + '------ Downloading: '+ imgdownload)
             urllib.request.urlretrieve(item['image'+str(i)],imgdownload)           
         except:
@@ -90,18 +101,6 @@ def getlink(url):
     
 
 
-urls = ['https://www.adayroi.com/khan-giay-napkin-elene-100-to-p-PRI46601',
-'https://www.adayroi.com/giay-ve-sinh-elene-hong-3-lop-10-cuon-p-1820186?offer=1820186_LZZ&search=elene',
-'https://www.adayroi.com/khan-giay-rut-da-nang-2-lop-silkwell-100-to-p-PRI1059973?offer=PRI1059973_CHK&search=silkwell',
-
-
-]
-
-
-
-filename = 'image.csv'
-downloadfolder = 'tinhdaugold'
-folder = 'C:/Users/minhcq/Desktop/download/'+downloadfolder
 
 
 if __name__ == '__main__':
