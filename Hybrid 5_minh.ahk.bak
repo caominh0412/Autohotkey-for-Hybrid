@@ -2047,14 +2047,14 @@ Loop
 		{
 			If ( A_LoopFileSizeKB > 450 )
 			{
-				file500kb ++
 				FileCopy, %A_LoopFilefullpath%, %A_temp%\%A_loopfilename%
 				;MsgBox, %A_temp%\%A_loopfilename%
 				RunWait, topng.exe `"%A_temp%\%A_LoopFileName%`" jpg
 				namenoext := StrSplit(A_loopfilename,".")[1]
-				FIleCopy, %A_temp%\%namenoext%.jpg,%A_LoopFiledir%,1
+				FIleCopy, %A_temp%\%namenoext%.jpg,%A_LoopFileDir%,1
+				FileMove, %A_LoopFilefullpath%, %A_Loopfiledir%\%namenoext%_renamed.jpeg
 				FileDelete,%A_temp%\%namenoext%.jpg
-				FileDelete,%A_temp%\%A_loopfilename%
+				FileDelete,%A_temp%\%A_loopfilename%				
 			}
 		}
 	}
@@ -2115,7 +2115,7 @@ Loop, %varFolder%\*.png
 		{
 				FileCopy, %A_LoopFilefullpath%, %A_temp%\%A_loopfilename%
 				;MsgBox, %A_temp%\%A_loopfilename%
-				Run, topng.exe `"%A_temp%\%A_LoopFileName%`" jpg
+				RunWait, topng.exe `"%A_temp%\%A_LoopFileName%`" jpg
 				namenoext := StrSplit(A_loopfilename,".")[1]
 				FIleCopy, %A_temp%\%namenoext%.jpg,%A_LoopFileDir%,1
 				FileMove, %A_LoopFilefullpath%, %A_Loopfiledir%\%namenoext%_renamed.png

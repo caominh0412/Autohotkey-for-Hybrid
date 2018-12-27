@@ -10,8 +10,8 @@ urls = ['https://www.adayroi.com/nuoc-hoa-nam-bvlgari-aqva-pour-homme-atlantiqve
 
 
 
-filename = 'tinviet.csv'
-downloadfolder = 'tinviet'
+filename = 'MAC.csv'
+downloadfolder = 'MAC'
 folder = 'C:/Users/minhcq/Desktop/download/'+downloadfolder
 
 def getImage(item_link):
@@ -22,8 +22,11 @@ def getImage(item_link):
     item_SKU = item_session.html.find('.panel-serial-number')[0].text
     SKU = item_SKU[8:item_SKU.find(' - ')]
     barcode = item_SKU[item_SKU.find('Mã SKU: ')+8:item_SKU.find(')')-1]
+    item['barcode'] = barcode
     item['SKU'] = SKU
     images = item_session.html.find('.theatre-image__list-item')
+    item['short_des'] = item_session.html.find('.short-des__content')[0].text
+    item['long_des'] = item_session.html.find('.product-detail__description')[0].text
     i = 0
     #print(SKU)
     if len(images) != 0:
@@ -33,25 +36,26 @@ def getImage(item_link):
             image_link = image_link.replace('348_502','762_1100')
             item['image'+str(i)] = image_link
             i+=1
-        print(item_link+'          '+ item['SKU'] + '   Image Count: '+str(i))    
+        #print(item_link+'          '+ item['SKU'] + '   Image Count: '+str(i))    
     if len(images) == 0:
         images = item_session.html.find('.gallery-thumbnail__item-image')
         for image in images:
             image_link = image.attrs['data-zoom-image']
             item['image'+str(i)] = image_link
             i+=1
-        print(item_link+'          '+ item['SKU'] + '   Image Count: '+str(i))
-    for i in range(0,len(item)-1):
+        #print(item_link+'          '+ item['SKU'] + '   Image Count: '+str(i))
+    '''for i in range(0,len(item)-1):
         try:
             #print('SKU: '+ SKU)
-            makemydir(folder+'/'+barcode)
-            #imgdownload = folder+'/'+SKU+'/'+item['image'+str(i)].split('/')[-1]
-            imgdownload = folder+'/'+barcode+'/'+SKU+'_'+str(i+1)+'.jpg'
-            print('SKU: '+ SKU +'------ Image: '+item['image'+str(i)] + '------ Downloading: '+ imgdownload)
-            urllib.request.urlretrieve(item['image'+str(i)],imgdownload)           
-        except:
-            print('Error - '+ SKU)
-            pass
+            imgdownload = folder+'/'+barcode+'/'+item['image'+str(i)].split('/')[-1]
+            #imgdownload = folder+'/'+barcode+'/'+SKU+'_'+str(i+1)+'.jpg'
+            if os.path.exists(imgdownload) == False:
+                makemydir(folder+'/'+barcode)
+                #print('SKU: '+ SKU +'------ Image: '+item['image'+str(i)] + '------ Downloading: '+ imgdownload)
+                urllib.request.urlretrieve(item['image'+str(i)],imgdownload)           
+        except Exception as e:
+            print('Error '+ str(e) + ' - '+ image_link + ' -- ' + imgdownload + ' -- ')
+            pass'''
     session.close()
     return item
 
