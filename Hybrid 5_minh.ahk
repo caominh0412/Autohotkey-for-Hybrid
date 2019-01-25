@@ -2046,15 +2046,17 @@ Loop
 		Loop, %varFolder%\*.jpg
 		{
 			If ( A_LoopFileSizeKB > 450 )
-			{
+			{	
+				IfNotInString, A_Loopfilename, renamed
+				{
 				FileCopy, %A_LoopFilefullpath%, %A_temp%\%A_loopfilename%
 				;MsgBox, %A_temp%\%A_loopfilename%
 				RunWait, topng.exe `"%A_temp%\%A_LoopFileName%`" jpg
 				namenoext := StrSplit(A_loopfilename,".")[1]
-				FIleCopy, %A_temp%\%namenoext%.jpg,%A_LoopFileDir%,1
 				FileMove, %A_LoopFilefullpath%, %A_Loopfiledir%\%namenoext%_renamed.jpg
-				FileDelete,%A_temp%\%namenoext%.jpg
+				FIleCopy, %A_temp%\%namenoext%.jpg,%A_LoopFileDir%,1
 				FileDelete,%A_temp%\%A_loopfilename%				
+				}
 			}
 		}
 	}
@@ -2142,7 +2144,10 @@ Loop, %varFolder%\*.jpeg
 	}	
 loop, %varFolder%\%varBarcode%_*.jpg
 {
-	fdcount ++
+	IfnotInString, A_loopfilename, renamed
+	{
+		fdcount ++
+	}
 }
 varAnh = %varFolder%\%varBarcode%_1.jpg
 GuiControl, 1:, ID, %varID%
