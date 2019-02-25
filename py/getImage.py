@@ -11,7 +11,7 @@ urls = ['https://www.adayroi.com/nuoc-hoa-nam-bvlgari-aqva-pour-homme-atlantiqve
 
 
 filename = 'MAC.csv'
-downloadfolder = 'MAC'
+downloadfolder = 'adayroi'
 folder = 'C:/Users/minhcq/Desktop/download/'+downloadfolder
 
 def getImage(item_link):
@@ -44,7 +44,7 @@ def getImage(item_link):
             item['image'+str(i)] = image_link
             i+=1
         #print(item_link+'          '+ item['SKU'] + '   Image Count: '+str(i))
-    '''for i in range(0,len(item)-1):
+    for i in range(0,len(item)-1):
         try:
             #print('SKU: '+ SKU)
             imgdownload = folder+'/'+barcode+'/'+item['image'+str(i)].split('/')[-1]
@@ -55,7 +55,7 @@ def getImage(item_link):
                 urllib.request.urlretrieve(item['image'+str(i)],imgdownload)           
         except Exception as e:
             print('Error '+ str(e) + ' - '+ image_link + ' -- ' + imgdownload + ' -- ')
-            pass'''
+            pass
     session.close()
     return item
 

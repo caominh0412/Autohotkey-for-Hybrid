@@ -109,7 +109,6 @@ f9::
 ;InputBox, vLink2, Link
 baocao.range("G" . Row ).value := "Anh bt"
 gosub,Next
-gosub,link1
 return
 
 Back:
@@ -190,13 +189,8 @@ GuiControl, 2:, Link2, %linh2%
 GuiControl, 2:, Link3, %linh3%
 return
 
-link1:
 f6::
-click,559, 58 left,1
-sleep,50
-send, ^a
-sleep,50
-SendRaw, %linh1%`n
+SendRaw, %linh1%
 return
 
 f3::
