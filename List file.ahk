@@ -17,6 +17,7 @@ GuiControl,, Folder, %Folder%
 return
 
 Folder:
+Gui,Submit,NoHide
 FileDelete, %A_Desktop%\listfile.Txt
 Loop, Files, %Folder%\*,D
 {
@@ -26,6 +27,7 @@ Run, %A_Desktop%\listfile.Txt
 return
 
 File:
+Gui,Submit,NoHide
 FileDelete, %A_Desktop%\listfile.csv
 Loop, Files, %Folder%\*.*,DR
 {

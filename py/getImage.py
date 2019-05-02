@@ -4,8 +4,9 @@ import urllib.request
 import os
 
 
-urls = ['https://www.adayroi.com/nuoc-hoa-nam-bvlgari-aqva-pour-homme-atlantiqve-eau-de-toilette-100ml-p-PRI1136271?offer=PRI1136271_P53',
-'https://www.adayroi.com/nuoc-hoa-nu-bvlgari-omnia-pink-sapphire-eau-de-toilette-40ml-p-921494?offer=921494_P53'
+urls = ['https://www.adayroi.com/bo-4-hop-muoi-ngam-chan-khu-mui-hoi-giam-dau-nhuc-bao-nhien-350g-p-924025?offer=924025_R4T',
+'https://www.adayroi.com/cao-che-vang-loi-sua-giam-can-bao-nhien-75g-p-PRI1222299?offer=PRI1222299_R4T',
+'https://www.adayroi.com/binh-xit-xua-duoi-con-trung-fly-way-bao-nhien-100ml-p-PRI1222018?offer=PRI1222018_R4T',
 ]
 
 
@@ -44,6 +45,7 @@ def getImage(item_link):
             item['image'+str(i)] = image_link
             i+=1
         #print(item_link+'          '+ item['SKU'] + '   Image Count: '+str(i))
+    i = 0
     for i in range(0,len(item)-1):
         try:
             #print('SKU: '+ SKU)

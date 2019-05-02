@@ -1,3 +1,5 @@
+FileEncoding, UTF-8
+
 Gui, Add, Edit, x2 y9 w400 h40 vFolder, 
 Gui, Add, Button, x92 y59 w100 h30 gFolder, Folder
 Gui, Add, Button, x202 y59 w100 h30 gFile, File
@@ -15,6 +17,7 @@ GuiControl,, Folder, %Folder%
 return
 
 Folder:
+Gui:Submit,NoHide
 FileDelete, %A_Desktop%\listfile.Txt
 Loop, Files, %Folder%\*,D
 {
@@ -24,6 +27,7 @@ Run, %A_Desktop%\listfile.Txt
 return
 
 File:
+Gui:Submit,NoHide
 FileDelete, %A_Desktop%\listfile.csv
 Loop, Files, %Folder%\*.*,DR
 {
