@@ -115,12 +115,29 @@ Run, %CurrentFolder%
 return
 
 OpenPts:
+list := []
 For k,ext in imageext
 {
 	Loop, %CurrentFolder%\*.%ext%
 	{
 		RunWait, C:\Program Files\Adobe\Adobe Photoshop CC 2015\Photoshop.exe %A_LoopFileFullPath%
 		sleep, 100
+		list.Push(A_LoopFileFullPath)	
+	}
+
+}
+random,RD1,1,list.MaxIndex()
+randomfile := RD1
+for i,k in list
+{
+	If (i = randomfile)
+	{
+		SplitPath, k, name, dir,ext
+		FileCopy, %k%, %dir%\ct_%i%.%ext%
+		RunWait, C:\Program Files\Adobe\Adobe Photoshop CC 2015\Photoshop.exe %dir%\ct_%i%.%ext%
+		sleep,100
+		;MsgBox, %dir%\ct_%i%.%ext%
+		break
 	}
 }
 return
@@ -193,8 +210,8 @@ For k,ext in imageext
 	Gdip_DisposeImage( pBM )                                          
 	Gdip_Shutdown( GDIPToken )
 	Sizeanh := W . "x" . H
-	GuiControl, 1 :,Sizeanh, %Sizeanh%
-	GuiControl, 1 :,Soanh, So anh: %Soanh%`n Folder: %Row%/%Foldernum%
+	GuiControl, 1 :,Sizeanh, %Sizeanh%`nFolder: %Row%
+	GuiControl, 1 :,Soanh, So anh: %Soanh%`n/%Foldernum%
 	AnhID = 1
 	Clipboard := CurrentFolder
 return

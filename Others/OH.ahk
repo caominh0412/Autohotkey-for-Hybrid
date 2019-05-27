@@ -106,10 +106,16 @@ return
 
 f9::
 ;Magic:
-;InputBox, vLink2, Link
-baocao.range("G" . Row ).value := "Anh bt"
+baocao.range("Q" . Row ).value := Clipboard
+InputBox, size, size
+size := StrSplit(size,"x")
+
+baocao.range("L" . Row ).value := size[1]
+baocao.range("M" . Row ).value := size[2]
+baocao.range("N" . Row ).value := size[3]
+baocao.range("O" . Row ).value := size[4]
 gosub,Next
-gosub,link1
+;gosub,link1
 return
 
 Back:
@@ -131,7 +137,7 @@ F2::
 ;sleep,50
 ;send, ^a
 ;sleep,50
-SendRaw %name%`n
+SendRaw, kích thước %name%`n
 return
 
 
