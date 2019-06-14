@@ -1,6 +1,6 @@
 Checkfolder:
 Gui, Add, Text, x12 y9 w100 h30 , Drop here
-Gui, Add, ListBox, x12 y39 w300 h310 vMyList,
+Gui, Add, ListBox, x12 y39 w300 h310 vMyList gMyList,
 ; Generated using SmartGUI Creator for SciTE
 Gui, Show, w332 h362, Untitled GUI
 return

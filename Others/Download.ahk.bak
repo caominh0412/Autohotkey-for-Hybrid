@@ -1,0 +1,44 @@
+baocaoloc := "C:\Users\minhcq\Desktop\Book1.xlsx"
+baocao := ComObjCreate("Excel.Application") 
+baocao.Workbooks.Open(baocaoloc)
+baocao.Visible := True
+Row := 1
+;dir := %A_Desktop%"\Mozlet"
+Loop,
+{
+	baocao.Range("A" . Row, "W" . Row ).Interior.ColorIndex := 43
+	barcode := baocao.range( "A" . Row ).value
+	StringReplace, barcode,barcode, ".000000" ,, All
+	FileCreateDir, %A_Desktop%\download1\%barcode%
+	If ErrorLevel
+	{
+		MsgBox, Tao Folder loi
+		baocao.Range("A" . Row, "W" . Row ).Interior.ColorIndex := 10
+	}
+	Else
+	{
+		Colume := ["B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W"]
+		For index, element in Colume
+		{
+			link := baocao.range(element . Row ).value
+			;MsgBox, %link%
+			IfInString, link, http
+			{
+				UrlDownloadToFile, %link% , %A_Desktop%\download1\%barcode%\%barcode%_%index%.jpg
+				If ErrorLevel
+				{
+					UrlDownloadToFile, %link% , %A_Desktop%\download1\%barcode%\%barcode%_%index%.jpg
+					If ErrorLevel
+					{
+						MsgBox, %ErrorLevel%
+						baocao.Range(element . Row).Interior.ColorIndex := 33
+					}
+				}
+			}
+		}
+	}
+	Row++
+}
+until barcode =""
+baocao.Workbooks.Close()
+MsgBox,Done

@@ -29,7 +29,7 @@ return
 File:
 Gui,Submit,NoHide
 FileDelete, %A_Desktop%\listfile.csv
-Loop, Files, %Folder%\*.*,DR
+Loop, Files, %Folder%\*.*,R
 {
     FileAppend, %A_LoopFileLongPath%*%A_LoopFileName%`n, %A_Desktop%\listfile.csv
 }

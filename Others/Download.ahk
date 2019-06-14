@@ -1,4 +1,4 @@
-baocaoloc := "C:\it-support\IT-Support\App\Book2.xlsx"
+baocaoloc = %A_Desktop%\Book1.xlsx
 baocao := ComObjCreate("Excel.Application") 
 baocao.Workbooks.Open(baocaoloc)
 baocao.Visible := True
@@ -17,21 +17,20 @@ Loop,
 	}
 	Else
 	{
-			Colume := ["B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W"]
+		Colume := ["B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W"]
 		For index, element in Colume
 		{
 			link := baocao.range(element . Row ).value
 			;MsgBox, %link%
-			IfInString, link, https
+			IfInString, link, http
 			{
-		
 				UrlDownloadToFile, %link% , %A_Desktop%\download1\%barcode%\%barcode%_%index%.jpg
 				If ErrorLevel
 				{
 					UrlDownloadToFile, %link% , %A_Desktop%\download1\%barcode%\%barcode%_%index%.jpg
 					If ErrorLevel
 					{
-						MsgBox,File: %A_Desktop%\download1\%barcode%\%barcode%_%index%.jpg`nLink: %link%
+						MsgBox, %ErrorLevel%
 						baocao.Range(element . Row).Interior.ColorIndex := 33
 					}
 				}
