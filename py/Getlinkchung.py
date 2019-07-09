@@ -9,10 +9,6 @@ import requests
 flickr=flickrapi.FlickrAPI('11b99b3dea83234ce76bcd877a334c74', 'b12284268485a0c1', cache=True)
 proxie = {'http':'http://10.220.85.82:9090','https':'http://10.220.85.82:9090',"ftp":'http://10.220.85.82:9090'}
 
-import urllib.request
-class AppURLopener(urllib.request.FancyURLopener):
-    version = "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.69 Safari/537.36"
-urllib._urlopener = AppURLopener()
 
 
 
@@ -24,39 +20,28 @@ headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML
 
 
 
-downloadfolder = 'hammer'
+downloadfolder = 'cai gi day'
 filename= downloadfolder + '.csv'
 folder = 'C:/Users/minhcq/Desktop/download/'+downloadfolder
 
-url = ['SMHM8150*https://static-prod.hammernutrition.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/w/v/wv24_4.jpg',
-'SMHM1150*https://static-prod.hammernutrition.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/w/s/ws24_1.jpg',
-'SMHM0150*https://static-prod.hammernutrition.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/w/c/wc24_1.jpg',
-'SMHM600B*https://product.hstatic.net/1000185761/product/hammer-gel-recoverite-strawberry-box12_master.jpg',
-'SMHM800B*https://product.hstatic.net/1000185761/product/hammer-gel-recoverite-vanilla-box-12_master.jpg',
-'SMHM700B*https://product.hstatic.net/1000185761/product/hammer-gel-recoverite-chocolate-box-12_master.jpg',
-'SMHM500B*https://product.hstatic.net/1000185761/product/hammer-gel-recoverite-orange-vanilla-box-12_master.jpg',
-'SMHM1209B*https://product.hstatic.net/1000185761/product/perpetuem-caffe-latte-12pack_master.jpg',
-'SMHM1211B*https://product.hstatic.net/1000185761/product/perpetuem-orange-vani-pack_master.jpg',
-'SMHM1858B*https://product.hstatic.net/1000185761/product/chocolatebox2_master.jpg',
-'SMHM6209*https://product.hstatic.net/1000185761/product/perpetuem-caffe-latte-1104g_master.jpg',
-'SMHM6211*https://product.hstatic.net/1000185761/product/perpetuem-orange-vani-1104g_master.jpg',
-'SMHM0053B*https://product.hstatic.net/1000185761/product/hammer-bar-cranberry-12pack_master.jpg',
-'SMHM0051B*https://product.hstatic.net/1000185761/product/hammer-bar-choco-chip-box-12pack_master.jpg',
-'SMHM0050B*https://product.hstatic.net/1000185761/product/hammer-bar-almond-raisin-box-12pack_master.jpg',
-'SMHM0052B*https://product.hstatic.net/1000185761/product/hammer-bar-coconut-box_master.jpg',
-'SMHM0054B*https://product.hstatic.net/1000185761/product/hammer-bar-oatmeal-apple-box12_master.jpg',
-'SMHM457B*https://static-prod.hammernutrition.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/e/l/elx_4.jpg',
-'SMHM299B*https://static-prod.hammernutrition.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/f/i/fizz-lemonlime-copy_3.jpg',
-'SMHM399B*https://static-prod.hammernutrition.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/f/i/fizz-mango-copy_1.jpg',
-'SMHM199B*https://static-prod.hammernutrition.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/f/i/fizz-grapefruit-copy_2.jpg',
-'SMHM599B*https://static-prod.hammernutrition.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/f/i/fizz-grape_1.jpg',
-'SMHM001B*https://static-prod.hammernutrition.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/r/a/raspberry-copy_1.jpg',
-'SMHM801B*https://static-prod.hammernutrition.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/a/p/apple-cinnamon-copy_1.jpg',
-'SMHM401B*https://static-prod.hammernutrition.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/b/a/banana-copy_1.jpg',
-'SMHM201B*https://static-prod.hammernutrition.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/c/h/chocolate-copy_1.jpg',
-'SMHM501B*https://static-prod.hammernutrition.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/o/r/orange-copy_1.jpg',
-'SMHM000B*https://static-prod.hammernutrition.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/p/e/peanut-butter-copy_1.jpg',
-'SMHM901B*https://static-prod.hammernutrition.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/t/r/tropical-copy_1.jpg',
+url = ['DXM*https://media.loveitopcdn.com/3558/dsc-1301.jpg;https://uphinh.org/image/6.Tcx4N;https://scontent-hkg3-1.xx.fbcdn.net/v/t1.0-9/35758834_2202792423081023_4857223509123792896_n.jpg?_nc_cat=100&_nc_oc=AQkRlK12Moacu-mqMwQy-MczEKIKoDndomcGS6crAp6O94n1eGgpLPwYe9ZW7-X0uwM&_nc_ht=scontent-hkg3-1.xx&oh=f6abf5f94b4ad59207ea34d4c1fe7a81&oe=5DB4EE06',
+'BTTXM*https://www.xaphongthiennhien.vn/uploads/SP/14-1560912416.jpg;https://xomuopvilam.com/upload/hinhthem/bao-tay-tam1-7566.jpg;https://xomuopvilam.com/upload/hinhthem/bao-tay-tam-9708.png',
+'TXM*https://cf.shopee.vn/file/ff4595144342a1ad53e48b8aba93193f;https://cf.shopee.vn/file/066588bad4a94d7447beabc509e71796;100',
+'XMCC*https://uphinh.org/images/2019/06/20/7c21ee1f116598242.jpg;;100',
+'XMCX*https://uphinh.org/images/2019/06/20/278b57a2fe9793af7.jpg;;100',
+'XMRC*https://cf.shopee.vn/file/ee8301e908cddfe30f4213df0c953197;https://uphinh.org/images/2019/06/20/61.jpg;https://salt.tikicdn.com/cache/550x550/ts/product/8e/61/f2/43ae05fc9c6881ec2a0bf076ad51800e.jpg',
+'5XMNT*https://uphinh.org/images/2019/06/20/21.jpg;;100',
+'SDM*https://i-shop.vnecdn.net/resize/560/560/images/2018/07/31/5b60728730ba4-CG-VA-XM-50ML---Copy-2-.png;https://tea-1.lozi.vn/v1/images/resized/son-duong-moi-co-mau-dang-thoi-1521267425-1-5739999-1521267425?w=480&type=s;100',
+'MCXP*;;100',
+'MCTN*https://vn-test-11.slatic.net/p/d1846c8510a66301dc76bfcc5645ee67.jpg;https://vn-test-11.slatic.net/p/30908b32169acc7fd31aa8d65800c099.jpg;https://vn-test-11.slatic.net/p/4fcf188b2b5e525146490ba3f2edfb42.jpg',
+'MDTN*https://vn-test-11.slatic.net/p/3104513a3f3ee9279d854550042bc298.jpg;;100',
+'MOHTN*https://uphinh.org/images/2019/06/20/32.jpg;;100',
+'MCRTN*https://uphinh.org/images/2019/06/20/31.jpg;;100',
+'MTTN*https://uphinh.org/images/2019/06/20/29.jpg;;100',
+'MNTN*https://uphinh.org/images/2019/06/20/30.jpg;;100',
+'MHHTN*https://uphinh.org/images/2019/06/20/33.jpg;;100',
+'MHNTN*https://uphinh.org/images/2019/06/20/34.jpg;;100',
+'MLLTN*https://uphinh.org/images/2019/06/20/35.jpg;;100',
 
 ]
 
@@ -102,7 +87,7 @@ def getImage(params):
 		photo_id = item_link.split('/')[5]
 		a =	flickr.photos.getSizes(photo_id=photo_id)[0].find('./size/[@label="Original"]').attrib['source']
 		item['image0'] = a
-	elif (item_link.find('jpg') >=0 ):
+	elif (item_link.find(';') >=0 ):
 		item['SKU'] = saveas
 		link_split = item_link.split(';')
 		for i,k in enumerate(link_split):
@@ -269,6 +254,28 @@ def getImage(params):
 			for image in images:
 				item_link = image.attrs['href']
 				item['image'+str(i)] ='https:' + item_link
+				i+=1
+		elif item_link.find('ktom') >0:
+			item_session = session.get(item_link,verify = False,proxies = proxie)
+			#item_session.html.render()
+			images = item_session.html.find('div.item')
+			if images == []:
+				print('Cant get this link ' + item_link)
+			i = 0
+			for image in images:
+				item_link = image.attrs['data-original']
+				item['image'+str(i)] ='http://ktom.vn/' + item_link
+				i+=1
+		elif item_link.find('snbshop') >0:
+			item_session = session.get(item_link,verify = False,proxies = proxie)
+			#item_session.html.render()
+			images = item_session.html.find('div.product-single__thumbnail')
+			if images == []:
+				print('Cant get this link ' + item_link)
+			i = 0
+			for image in images:
+				item_link = image.attrs['data-img']
+				item['image'+str(i)] ='http:' + item_link
 				i+=1			
 		else:
 			print("ERROR - Cant get link " + item_link )
@@ -279,7 +286,10 @@ def getImage(params):
 				if saveas == '':
 					saveas = item['SKU']
 				#print('SKU: '+ SKU)
-				imgdownload = folder+'/'+saveas+'/'+item['image'+str(i)].split('/')[-1]
+				imgname = str(i) + item['image'+str(i)].split('/')[-1]
+				if imgname.find('?') > 0 :
+					imgname = imgname.split('?')[0]
+				imgdownload = folder+'/'+saveas+'/'+imgname
 				#imgdownload = folder+'/'+barcode+'/'+SKU+'_'+str(i+1)+'.jpg'
 				if os.path.exists(imgdownload) == False:
 					try:
@@ -287,7 +297,7 @@ def getImage(params):
 					except:
 						pass
 					#print('SKU: '+ item['SKU'] +'------ Image: '+item['image'+str(i)] + '------ Downloading: '+ imgdownload)
-				open(imgdownload,'wb').write(requests.get(item['image'+str(i)],proxies=proxie).content)          
+				open(imgdownload,'wb').write(requests.get(item['image'+str(i)],proxies=proxie,verify=False).content)          
 
 			except Exception as e:
 				print('Error '+ str(e) + ' - '+ item['image'+str(i)] + ' -- ' + imgdownload)
