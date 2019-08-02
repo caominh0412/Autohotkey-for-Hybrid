@@ -20,28 +20,15 @@ headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML
 
 
 
-downloadfolder = 'cai gi day'
+downloadfolder = 'gi do'
 filename= downloadfolder + '.csv'
 folder = 'C:/Users/minhcq/Desktop/download/'+downloadfolder
 
-url = ['DXM*https://media.loveitopcdn.com/3558/dsc-1301.jpg;https://uphinh.org/image/6.Tcx4N;https://scontent-hkg3-1.xx.fbcdn.net/v/t1.0-9/35758834_2202792423081023_4857223509123792896_n.jpg?_nc_cat=100&_nc_oc=AQkRlK12Moacu-mqMwQy-MczEKIKoDndomcGS6crAp6O94n1eGgpLPwYe9ZW7-X0uwM&_nc_ht=scontent-hkg3-1.xx&oh=f6abf5f94b4ad59207ea34d4c1fe7a81&oe=5DB4EE06',
-'BTTXM*https://www.xaphongthiennhien.vn/uploads/SP/14-1560912416.jpg;https://xomuopvilam.com/upload/hinhthem/bao-tay-tam1-7566.jpg;https://xomuopvilam.com/upload/hinhthem/bao-tay-tam-9708.png',
-'TXM*https://cf.shopee.vn/file/ff4595144342a1ad53e48b8aba93193f;https://cf.shopee.vn/file/066588bad4a94d7447beabc509e71796;100',
-'XMCC*https://uphinh.org/images/2019/06/20/7c21ee1f116598242.jpg;;100',
-'XMCX*https://uphinh.org/images/2019/06/20/278b57a2fe9793af7.jpg;;100',
-'XMRC*https://cf.shopee.vn/file/ee8301e908cddfe30f4213df0c953197;https://uphinh.org/images/2019/06/20/61.jpg;https://salt.tikicdn.com/cache/550x550/ts/product/8e/61/f2/43ae05fc9c6881ec2a0bf076ad51800e.jpg',
-'5XMNT*https://uphinh.org/images/2019/06/20/21.jpg;;100',
-'SDM*https://i-shop.vnecdn.net/resize/560/560/images/2018/07/31/5b60728730ba4-CG-VA-XM-50ML---Copy-2-.png;https://tea-1.lozi.vn/v1/images/resized/son-duong-moi-co-mau-dang-thoi-1521267425-1-5739999-1521267425?w=480&type=s;100',
-'MCXP*;;100',
-'MCTN*https://vn-test-11.slatic.net/p/d1846c8510a66301dc76bfcc5645ee67.jpg;https://vn-test-11.slatic.net/p/30908b32169acc7fd31aa8d65800c099.jpg;https://vn-test-11.slatic.net/p/4fcf188b2b5e525146490ba3f2edfb42.jpg',
-'MDTN*https://vn-test-11.slatic.net/p/3104513a3f3ee9279d854550042bc298.jpg;;100',
-'MOHTN*https://uphinh.org/images/2019/06/20/32.jpg;;100',
-'MCRTN*https://uphinh.org/images/2019/06/20/31.jpg;;100',
-'MTTN*https://uphinh.org/images/2019/06/20/29.jpg;;100',
-'MNTN*https://uphinh.org/images/2019/06/20/30.jpg;;100',
-'MHHTN*https://uphinh.org/images/2019/06/20/33.jpg;;100',
-'MHNTN*https://uphinh.org/images/2019/06/20/34.jpg;;100',
-'MLLTN*https://uphinh.org/images/2019/06/20/35.jpg;;100',
+url = ['KPONGUONGMTHXANH*https://tiki.vn/ong-uong-men-tieu-hoa-p13550539.html?spid=13550540',
+'KPSATFOLICB12-DO*https://tiki.vn/thuc-pham-chuc-nang-siro-sat-folic-b12-p13550529.html?spid=13550530',
+'KPKEMBOIQEETREE*https://tiki.vn/kem-boi-tri-qee-tree-p13550531.html?spid=13550532',
+'KPSTR500ML*https://tiki.vn/sua-tam-rom-thao-duoc-p13550527.html?spid=13550528',
+
 
 ]
 
@@ -129,7 +116,7 @@ def getImage(params):
 					i+=1
 			#print(item_link+'          '+ item['SKU'] + '   Image Count: '+str(i))
 		elif item_link.find('tiki') >= 0:
-			item_session = session.get(item_link,verify = False,proxies = proxie)
+			item_session = session.get(item_link)
 			item_session.html.render()		
 			if saveas != '':
 				SKU = item_session.html.find('.item-sku')[0].text
@@ -168,7 +155,7 @@ def getImage(params):
 				a = image.attrs['style']
 				item_link = a[a.find('url')+5:a.find(');')-1]
 				item['image'+str(i)] = item_link[:-3]
-				i+=1							
+				i+=1									
 		elif item_link.find('noithathoanmy.com.vn') >=0:
 			item_session = session.get(item_link,proxies = proxie)
 			item_session.html.render(timeout=20,sleep=3,wait=2)
@@ -276,7 +263,23 @@ def getImage(params):
 			for image in images:
 				item_link = image.attrs['data-img']
 				item['image'+str(i)] ='http:' + item_link
-				i+=1			
+				i+=1
+		elif item_link.find('elly.vn') >0:
+			item_session = session.get(item_link,proxies = proxie)
+			#item_session.html.render()
+			try:
+				saveas = item_session.html.find('.sku')[0].text.split(' : ')[1]
+				images = item_session.html.find('div[product=details]')[0].find('.woocommerce-product-gallery')[0].find('a')
+				if images == []:
+					print('Cant get this link ' + item_link)
+				i = 0
+				for image in images:
+					item_link = image.attrs['href']
+					item['image'+str(i)] =item_link	
+					i+=1
+			except:
+				print("ERROR - Cant get link " + item_link )
+				pass						
 		else:
 			print("ERROR - Cant get link " + item_link )
 		session.close()
@@ -297,7 +300,7 @@ def getImage(params):
 					except:
 						pass
 					#print('SKU: '+ item['SKU'] +'------ Image: '+item['image'+str(i)] + '------ Downloading: '+ imgdownload)
-				open(imgdownload,'wb').write(requests.get(item['image'+str(i)],proxies=proxie,verify=False).content)          
+				open(imgdownload,'wb').write(requests.get(item['image'+str(i)],verify=False).content)          
 
 			except Exception as e:
 				print('Error '+ str(e) + ' - '+ item['image'+str(i)] + ' -- ' + imgdownload)
@@ -318,7 +321,7 @@ def makemydir(whatever):
 
 if debug == 0:
 	if __name__ == '__main__':
-		pool = Pool(processes=4)
+		pool = Pool(processes=8)
 		outputs = pool.map(getImage,url)
 		pool.close()
 		pool.join()

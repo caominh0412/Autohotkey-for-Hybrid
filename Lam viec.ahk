@@ -127,17 +127,20 @@ For k,ext in imageext
 
 }
 random,RD1,1,list.MaxIndex()
-randomfile := RD1
+random,RD2,1,list.MaxIndex()
+if RD2 = RD1
+{
+	random, RD2,1,list.MaxIndex()
+}
 for i,k in list
 {
-	If (i = randomfile)
+	If (i = RD1) or (i = RD2)
 	{
 		SplitPath, k, name, dir,ext
 		FileCopy, %k%, %dir%\ct_%i%.%ext%
 		RunWait, C:\Program Files\Adobe\Adobe Photoshop CC 2015\Photoshop.exe %dir%\ct_%i%.%ext%
 		sleep,100
 		;MsgBox, %dir%\ct_%i%.%ext%
-		break
 	}
 }
 return

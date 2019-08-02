@@ -124,22 +124,26 @@ For k,ext in imageext
 		sleep, 100
 		list.Push(A_LoopFileFullPath)	
 	}
-	random,RD1,1,list.MaxIndex()
-		randomfile := RD1
-		for i,k in list
-		{
-			If (i = randomfile)
-			{
-				SplitPath, k, name, dir,ext
-				FileCopy, %k%, %dir%\ct_%i%.%ext%
-				RunWait, C:\Program Files\Adobe\Adobe Photoshop CC 2015\Photoshop.exe %dir%\ct_%i%.%ext%
-				sleep,100
-				;MsgBox, %dir%\ct_%i%.%ext%
-				break
-			}
-		}
-}
 
+}
+random,RD1,1,list.MaxIndex()
+random,RD2,1,list.MaxIndex()
+if RD2 = RD1
+{
+	random, RD2,1,list.MaxIndex()
+}
+for i,k in list
+{
+	If (i = RD1) or (i = RD2)
+	{
+		SplitPath, k, name, dir,ext
+		FileCopy, %k%, %dir%\ct_%i%.%ext%
+		RunWait, C:\Program Files\Adobe\Adobe Photoshop CC 2015\Photoshop.exe %dir%\ct_%i%.%ext%
+		sleep,100
+		;MsgBox, %dir%\ct_%i%.%ext%
+		break
+	}
+}
 return
 
 Checkfolder:

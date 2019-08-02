@@ -4,78 +4,27 @@ import urllib.request
 import os
 import requests
 
+__location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 proxie = {'http':'http://10.220.85.82:9090','https':'http://10.220.85.82:9090',"ftp":'http://10.220.85.82:9090'}
 
-downloadfolder = 'mango5'
-folder = 'C:/Users/minhcq/Desktop/download/'+downloadfolder
+folder = 'mango'
 
 debug=0
 filename = 'image.csv'
-items =['31090054-KL',
-'31097534-DK',
-'33000221-TM',
-'33000384-H1',
-'33003643-G5',
-'33003679-OW',
-'33003680-2',
-'33007685-45',
-'33010013-6',
-'33010014-10',
-'33010014-2',
-'33010325-2',
-'33017660-99',
-'33020386-AU',
-'33023567-1',
-'33023567-5T',
-'33023567-9',
-'33023663-37',
-'33025730-5',
-'33029051-99',
-'33030010-2',
-'33030010-KL',
-'33030090-4D',
-'33030170-10',
-'33033568-OW',
-'33035616-OW',
-'33035750-2',
-'33040227-B4',
-'33043560-OW',
-'33049006-J3',
-'33053566-OW',
-'33053698-92',
-'33060068-2',
-'33070115-OW',
-'33070169-10',
-'33070169-N1',
-'33070864-92',
-'33073015-2',
-'33073020-56',
-'33077612-94',
-'33080215-OW',
-'33087511-EY',
-'33090095-OW',
-'33093563-9',
-'33095560-2',
-'33095595-G5',
-'33095724-56',
-'33915747-12',
-'41963696-9',
-'43080585-2',
-'43080585-56',
-'43800836-15',
-'44040472-1',
-'44940472-51',
-'61003046-1',
-'61033668-5',
-'63029033-1',
-'73025619-45',
-
-]
 Error = []
+items = []
+try:
+    with open(os.path.join(__location__,'mango.txt'),'r') as f:
+        items = f.readlines()
+except:
+    print('Error open file')
+    raise SystemExit()
+
 
 def getImage(item_master):
     item_id=item_master.split('-')[0]
     item_color = item_master.split('-')[1]
+    item_master = str(item_id)+'_'+str(item_color)
     if len(item_color) == 1:
         item_color = "0"+str(item_color)
     if os.path.isdir(folder+'/'+item_master):
